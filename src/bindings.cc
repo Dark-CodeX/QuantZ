@@ -1,3 +1,9 @@
+/**
+ * @file bindings.cc
+ * @license This file is licensed under the GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007. You may obtain a copy of this license at https://www.gnu.org/licenses/gpl-3.0.en.html.
+ * @author Tushar Chaurasia (Dark-CodeX)
+ */
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
