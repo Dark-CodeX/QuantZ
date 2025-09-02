@@ -11,17 +11,17 @@ double vector_sum(const double *__restrict vec, size_t len)
     DOUBLE vsum = SET_ZERO;
 
     size_t i = 0;
-    for (; i + VEC_LEN - 1 < len; i += VEC_LEN)
+    for (; i + SIMD_VEC_LEN - 1 < len; i += SIMD_VEC_LEN)
     {
         DOUBLE v = LOAD(&vec[i]);
         vsum = ADD(vsum, v);
     }
 
-    double temp[VEC_LEN];
+    double temp[SIMD_VEC_LEN];
     STORE(temp, vsum);
 
     double result = 0;
-    for (int j = 0; j < VEC_LEN; j++)
+    for (int j = 0; j < SIMD_VEC_LEN; j++)
         result += temp[j];
 
     for (; i < len; i++)
@@ -40,17 +40,17 @@ double vector_multiply(const double *__restrict vec, size_t len)
     DOUBLE vprod = SET_X(1.0);
 
     size_t i = 0;
-    for (; i + VEC_LEN - 1 < len; i += VEC_LEN)
+    for (; i + SIMD_VEC_LEN - 1 < len; i += SIMD_VEC_LEN)
     {
         DOUBLE v = LOAD(&vec[i]);
         vprod = MULTIPLY(vprod, v);
     }
 
-    double temp[VEC_LEN];
+    double temp[SIMD_VEC_LEN];
     STORE(temp, vprod);
 
     double result = 1;
-    for (int j = 0; j < VEC_LEN; j++)
+    for (int j = 0; j < SIMD_VEC_LEN; j++)
         result *= temp[j];
 
     for (; i < len; i++)
@@ -64,7 +64,7 @@ double vector_variance(const double *__restrict vec, size_t len)
     DOUBLE vsum = SET_ZERO, vsqsum = SET_ZERO;
 
     size_t i = 0;
-    for (; i + VEC_LEN - 1 < len; i += VEC_LEN)
+    for (; i + SIMD_VEC_LEN - 1 < len; i += SIMD_VEC_LEN)
     {
         // fma(a,b,c) = a * b + c
         DOUBLE v = LOAD(&vec[i]);
@@ -72,12 +72,12 @@ double vector_variance(const double *__restrict vec, size_t len)
         vsqsum = FMA(v, v, vsqsum);
     }
 
-    double temp_vsum[VEC_LEN], temp_vsqsum[VEC_LEN];
+    double temp_vsum[SIMD_VEC_LEN], temp_vsqsum[SIMD_VEC_LEN];
     STORE(temp_vsum, vsum);
     STORE(temp_vsqsum, vsqsum);
 
     double sum = 0, sqsum = 0;
-    for (int j = 0; j < VEC_LEN; j++)
+    for (int j = 0; j < SIMD_VEC_LEN; j++)
     {
         sum += temp_vsum[j];
         sqsum += temp_vsqsum[j];
@@ -105,7 +105,7 @@ double vector_dot_product(const double *__restrict vec1, const double *__restric
     DOUBLE vsum = SET_ZERO;
 
     size_t i = 0;
-    for (; i + VEC_LEN - 1 < len; i += VEC_LEN)
+    for (; i + SIMD_VEC_LEN - 1 < len; i += SIMD_VEC_LEN)
     {
         DOUBLE v1 = LOAD(&vec1[i]);
         DOUBLE v2 = LOAD(&vec2[i]);
@@ -113,11 +113,11 @@ double vector_dot_product(const double *__restrict vec1, const double *__restric
         vsum = FMA(v1, v2, vsum);
     }
 
-    double temp[VEC_LEN];
+    double temp[SIMD_VEC_LEN];
     STORE(temp, vsum);
 
     double result = 0;
-    for (size_t j = 0; j < VEC_LEN; j++)
+    for (size_t j = 0; j < SIMD_VEC_LEN; j++)
         result += temp[j];
 
     for (; i < len; i++)

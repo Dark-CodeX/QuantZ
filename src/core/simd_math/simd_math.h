@@ -25,7 +25,7 @@
 #define MULTIPLY(a, b) _mm512_mul_pd(a, b)
 #define DIVIDE(a, b) _mm512_div_pd(a, b)
 #define FMA(a, b, c) _mm512_fmadd_pd(a, b, c)
-#define VEC_LEN 8
+#define SIMD_VEC_LEN 8
 #define SIMD_MODE "512"
 
 #elif defined(__AVX2__)
@@ -39,7 +39,7 @@
 #define MULTIPLY(a, b) _mm256_mul_pd(a, b)
 #define DIVIDE(a, b) _mm256_div_pd(a, b)
 #define FMA(a, b, c) _mm256_fmadd_pd(a, b, c)
-#define VEC_LEN 4
+#define SIMD_VEC_LEN 4
 #define SIMD_MODE "256"
 
 #elif defined(__SSE2__)
@@ -53,7 +53,7 @@
 #define MULTIPLY(a, b) _mm_mul_pd(a, b)
 #define DIVIDE(a, b) _mm_div_pd(a, b)
 #define FMA(a, b, c) _mm_fmadd_pd(a, b, c)
-#define VEC_LEN 2
+#define SIMD_VEC_LEN 2
 #define SIMD_MODE "128"
 
 #else
