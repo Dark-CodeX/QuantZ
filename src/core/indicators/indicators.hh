@@ -14,7 +14,11 @@
 
 #include "../simd_math/simd_math.h"
 
-namespace engine::indicators
+#define MAX_3(a, b, c) (a > b ? (a > c ? a : c) : (b > c ? b : c))
+
+#define MAX_2(a, b) (a > b ? a : b)
+
+namespace core::indicators
 {
     /**
      * @brief SMA(Simple Moving Average) Indicator
@@ -65,7 +69,7 @@ namespace engine::indicators
     std::vector<double> MACD(const std::vector<double> &prices, const std::size_t &fast, const std::size_t &slow);
 
     /**
-     * @brief RSI Indicator
+     * @brief RSI(Relative Strength Index) Indicator
      *
      * @param prices Price over n periods
      * @param n Number of periods
@@ -74,7 +78,7 @@ namespace engine::indicators
     std::vector<double> RSI(const std::vector<double> &prices, const std::size_t &n);
 
     /**
-     * @brief
+     * @brief Bollinger Bands Indicator
      *
      * @param prices Price over n periods
      * @param n Number of periods
@@ -82,6 +86,17 @@ namespace engine::indicators
      * @return Visualizes volatility bands
      */
     std::vector<std::vector<double>> BollingerBands(const std::vector<double> &prices, const std::size_t n, const double &k);
+
+    /**
+     * @brief  ATR(Average True Range) Indicator
+     *
+     * @param highs High prices over n periods
+     * @param lows Low prices over n periods
+     * @param closes Closing prices over n periods
+     * @param n Number of periods
+     * @return Measures market volatility
+     */
+    std::vector<double> ATR(const std::vector<double> &highs, const std::vector<double> &lows, const std::vector<double> &closes, const std::size_t &n);
 }
 
 #endif
