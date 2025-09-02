@@ -4,8 +4,8 @@
  * @author Tushar Chaurasia (Dark-CodeX)
  */
 
-#ifndef INDICATOR_HH
-#define INDICATOR_HH
+#ifndef QUANTZ_INDICATOR_HH
+#define QUANTZ_INDICATOR_HH
 
 #include <vector>
 #include <numeric>
