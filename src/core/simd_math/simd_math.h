@@ -7,6 +7,11 @@
 #ifndef QUANTZ_MATH_H
 #define QUANTZ_MATH_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <immintrin.h>
 #include <math.h>
 #include <stddef.h>
@@ -60,11 +65,15 @@
 #error "No supported SIMD instruction set found."
 #endif
 
-double vector_sum(const double * __restrict vec, size_t len);
-double vector_mean(const double * __restrict vec, size_t len);
-double vector_multiply(const double * __restrict vec, size_t len);
-double vector_variance(const double * __restrict vec, size_t len);
-double vector_std_deviation(const double * __restrict vec, size_t len);
-double vector_dot_product(const double *__restrict vec1, const double *__restrict vec2, size_t len);
+    double vector_sum(const double *__restrict vec, size_t len);
+    double vector_mean(const double *__restrict vec, size_t len);
+    double vector_multiply(const double *__restrict vec, size_t len);
+    double vector_variance(const double *__restrict vec, size_t len);
+    double vector_std_deviation(const double *__restrict vec, size_t len);
+    double vector_dot_product(const double *__restrict vec1, const double *__restrict vec2, size_t len);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
