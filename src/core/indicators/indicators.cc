@@ -6,7 +6,7 @@
 
 #include "./indicators.hh"
 
-namespace engine::indicators
+namespace core::indicators
 {
     std::vector<double> SMA(const std::vector<double> &prices, const std::size_t &n)
     {
@@ -171,5 +171,21 @@ namespace engine::indicators
         bb[2] = std::move(lower);
 
         return bb;
+    }
+
+    std::vector<double> ATR(const std::vector<double> &highs, const std::vector<double> &lows, const std::vector<double> &closes, const std::size_t &n)
+    {
+        if (highs.size() != lows.size() || highs.size() != closes.size() || highs.empty())
+            return {};
+
+        std::vector<double> true_range(highs.size(), std::numeric_limits<double>::quiet_NaN());
+        true_range[0] = highs[0] - lows[0];
+
+        for (std::size_t i = 1; i < highs.size(); i++)
+        {
+            true_range[i] = MAX_3(highs[i] - lows[i], std::abs(highs[i] - closes[i - 1]), std::abs(lows[i] - closes[i - 1]));
+        }
+
+        return SMA(true_range, n);
     }
 }
