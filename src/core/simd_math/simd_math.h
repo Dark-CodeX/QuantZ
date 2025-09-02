@@ -4,8 +4,8 @@
  * @author Tushar Chaurasia (Dark-CodeX)
  */
 
-#ifndef MATH_H
-#define MATH_H
+#ifndef QUANTZ_MATH_H
+#define QUANTZ_MATH_H
 
 #include <immintrin.h>
 #include <math.h>
