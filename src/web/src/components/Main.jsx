@@ -107,7 +107,7 @@ function FlowCanvas({ indicatorsList }) {
                             <label>Value:</label>
                             <LiveSingleText
                                 value={selectedNode.data.value || ''}
-                                placeholder='value'
+                                placeholder='Value'
                                 onChange={(e) => handleSettingChange('value', e.target.value)}
                             />
                         </div>
@@ -118,7 +118,7 @@ function FlowCanvas({ indicatorsList }) {
                             <label>Period:</label>
                             <LiveSingleText
                                 value={selectedNode.data.period || ''}
-                                placeholder='period'
+                                placeholder='Period'
                                 onChange={(e) => handleSettingChange('period', e.target.value)}
                             />
                         </div>
