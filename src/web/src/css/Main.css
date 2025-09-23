@@ -7,7 +7,7 @@ html,
 #root {
     margin: 0;
     height: 100%;
-    font-family: "Segoe UI", system-ui, sans-serif;
+    font-family: var(--font);
     background: var(--bg);
     color: var(--fg);
 }
@@ -154,7 +154,7 @@ html,
     background: var(--panel);
 }
 
-.react-flow__controls button svg path{
+.react-flow__controls button svg path {
     fill: var(--fg);
 }
 
