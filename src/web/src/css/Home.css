@@ -1,0 +1,110 @@
+* {
+  box-sizing: border-box;
+}
+
+body,
+html,
+#root {
+  margin: 0;
+  height: 100%;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100% - 79px);
+}
+
+.topbar {
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.title {
+  font-weight: bold;
+  color: var(--fg);
+}
+
+.sub {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.shell {
+  display: flex;
+  flex: 1;
+  gap: 16px;
+}
+
+.side {
+  width: 20rem;
+  background: var(--panel);
+  color: var(--fg);
+  padding: 16px;
+  border-right: 1px solid var(--border);
+}
+
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
+
+.new,
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  border: 2px dashed var(--border);
+  transition: all 0.2s ease;
+}
+
+.new {
+  cursor: pointer;
+}
+
+.new:hover {
+  border-color: var(--primary);
+  background: var(--panel);
+  box-shadow: 0 4px 12px rgba(10, 132, 255, 0.15);
+}
+
+.new>small,
+.new>div {
+  color: var(--fg);
+}
+
+.plus {
+  font-size: 36px;
+  color: var(--primary);
+  font-weight: 900;
+}
