@@ -16,6 +16,7 @@ import { LiveButton, LiveSingleText } from "./LiveUI";
 const INDICATORS = ["SMA", "EMA", "WMA", "VWMA", "MACD", "RSI", "BollingerBands", "ATR"];
 const OPERATORS = ["Equals To (=)", "Not Equals To (≠)", "Less Than (<)", "More Than (>)", "Less Than or Equals To (≤)", "More Than or Equals To (≥)"];
 const ACTIONS = ["Buy", "Sell"]
+const CONTROL_NODES = ["Start", "End"];
 
 const getId = () => crypto.randomUUID();
 
@@ -34,7 +35,7 @@ function FlowCanvas({ indicatorsList }) {
     const onDrop = useCallback(
         (event) => {
             event.preventDefault();
-            const type = event.dataTransfer.getData('application/reactflow');
+            const type = event.dataTransfer.getData("application/reactflow");
             if (!type) return;
 
             const bounds = event.currentTarget.getBoundingClientRect();
@@ -43,7 +44,7 @@ function FlowCanvas({ indicatorsList }) {
                 y: event.clientY - bounds.top,
             });
 
-            const kind = indicatorsList.includes(type) ? 'indicator' : (OPERATORS.includes(type) ? 'operator' : 'action');
+            const kind = indicatorsList.includes(type) ? "indicator" : (OPERATORS.includes(type) ? "operator" : (ACTIONS.includes(type) ? "action" : "control"));
 
 
             const newNode = {
@@ -51,7 +52,7 @@ function FlowCanvas({ indicatorsList }) {
                 type: 'default',
                 position,
                 data: { label: type, kind },
-                className: kind === 'indicator' ? 'node-indicator' : (kind === "operator" ? "node-operator" : "node-action"),
+                className: kind === 'indicator' ? 'node-indicator' : (kind === "operator" ? "node-operator" : (kind === "action" ? "node-action" : "node-control")),
             };
 
             setNodes((nds) => nds.concat(newNode));
@@ -141,8 +142,8 @@ export default function Main() {
         <div className="main-container">
             {/* Left Panel */}
             <aside className="left-panel">
-                <section className="panel-section">
-                    <h3>Indicators</h3>
+                <details className="panel-section">
+                    <summary>Indicators</summary>
                     <div className="items">
                         {INDICATORS.map((ind) => (
                             <div
@@ -155,10 +156,10 @@ export default function Main() {
                             </div>
                         ))}
                     </div>
-                </section>
+                </details>
 
-                <section className="panel-section">
-                    <h3>Operators</h3>
+                <details className="panel-section">
+                    <summary>Operators</summary>
                     <div className="items">
                         {OPERATORS.map((op) => (
                             <div
@@ -171,10 +172,10 @@ export default function Main() {
                             </div>
                         ))}
                     </div>
-                </section>
+                </details>
 
-                <section className="panel-section">
-                    <h3>Actions</h3>
+                <details className="panel-section">
+                    <summary>Actions</summary>
                     <div className="items">
                         {ACTIONS.map((ind) => (
                             <div
@@ -187,7 +188,23 @@ export default function Main() {
                             </div>
                         ))}
                     </div>
-                </section>
+                </details>
+
+                <details className="panel-section" open>
+                    <summary>Control</summary>
+                    <div className="items">
+                        {CONTROL_NODES.map((ind) => (
+                            <div
+                                key={ind}
+                                className="draggable-item"
+                                draggable
+                                onDragStart={(e) => handleDragStart(e, ind)}
+                            >
+                                {ind}
+                            </div>
+                        ))}
+                    </div>
+                </details>
             </aside>
 
             {/* Main Canvas */}
