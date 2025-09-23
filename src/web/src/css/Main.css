@@ -92,7 +92,7 @@ html,
 }
 
 .react-flow__node.node-indicator {
-    background: linear-gradient(180deg, rgba(10, 132, 255, 0.06), var(--surface));
+    background: linear-gradient(180deg, rgba(10, 132, 255, 0.1), var(--surface));
     border: 1px solid rgba(10, 132, 255, 0.18);
     color: var(--primary-dark);
     padding: 6px 10px;
@@ -102,9 +102,19 @@ html,
 }
 
 .react-flow__node.node-operator {
-    background: linear-gradient(180deg, rgba(227, 241, 255, 0.06), var(--surface));
+    background: linear-gradient(180deg, rgba(227, 241, 255, 0.1), var(--surface));
     border: 1px solid var(--border);
     color: var(--fg);
+    padding: 6px 10px;
+    border-radius: var(--radius);
+    font-weight: 700;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.04);
+}
+
+.react-flow__node.node-action {
+    background: linear-gradient(180deg, rgba(255, 165, 0, 0.1), var(--surface));
+    border: 1px solid var(--border);
+    color: rgb(255, 165, 0);
     padding: 6px 10px;
     border-radius: var(--radius);
     font-weight: 700;
