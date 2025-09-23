@@ -31,11 +31,12 @@ html,
     margin-bottom: 20px;
 }
 
-.panel-section h3 {
+.panel-section summary {
     margin: 0 0 10px 0;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--fg);
+    cursor: pointer;
 }
 
 .items {
@@ -115,6 +116,16 @@ html,
     background: linear-gradient(180deg, rgba(255, 165, 0, 0.1), var(--surface));
     border: 1px solid var(--border);
     color: rgb(255, 165, 0);
+    padding: 6px 10px;
+    border-radius: var(--radius);
+    font-weight: 700;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.04);
+}
+
+.react-flow__node.node-control {
+    background: linear-gradient(180deg, rgba(51, 180, 89, 0.1), var(--surface));
+    border: 1px solid var(--border);
+    color: rgb(51, 180, 89);
     padding: 6px 10px;
     border-radius: var(--radius);
     font-weight: 700;
