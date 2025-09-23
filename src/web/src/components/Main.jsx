@@ -15,9 +15,9 @@ import { LiveButton, LiveSingleText } from "./LiveUI";
 
 const INDICATORS = ["SMA", "EMA", "WMA", "VWMA", "MACD", "RSI", "BollingerBands", "ATR"];
 const OPERATORS = ["Equals To (=)", "Not Equals To (≠)", "Less Than (<)", "More Than (>)", "Less Than or Equals To (≤)", "More Than or Equals To (≥)"];
+const ACTIONS = ["Buy", "Sell"]
 
-let nodeId = 1;
-const getId = () => `node_${nodeId++}`;
+const getId = () => crypto.randomUUID();
 
 function FlowCanvas({ indicatorsList }) {
     const [nodes, setNodes] = useState([]);
@@ -43,14 +43,15 @@ function FlowCanvas({ indicatorsList }) {
                 y: event.clientY - bounds.top,
             });
 
-            const kind = indicatorsList.includes(type) ? 'indicator' : 'operator';
+            const kind = indicatorsList.includes(type) ? 'indicator' : (OPERATORS.includes(type) ? 'operator' : 'action');
+
 
             const newNode = {
                 id: getId(),
                 type: 'default',
                 position,
                 data: { label: type, kind },
-                className: kind === 'indicator' ? 'node-indicator' : 'node-operator',
+                className: kind === 'indicator' ? 'node-indicator' : (kind === "operator" ? "node-operator" : "node-action"),
             };
 
             setNodes((nds) => nds.concat(newNode));
@@ -61,10 +62,6 @@ function FlowCanvas({ indicatorsList }) {
     const onDragOver = useCallback((event) => {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'move';
-    }, []);
-
-    const onRightClick = useCallback((event) => {
-        setNodes((prev) => prev.filter((_, i) => i !== index));
     }, []);
 
     // Double click node -> open settings
@@ -171,6 +168,22 @@ export default function Main() {
                                 onDragStart={(e) => handleDragStart(e, op)}
                             >
                                 {op}
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <section className="panel-section">
+                    <h3>Actions</h3>
+                    <div className="items">
+                        {ACTIONS.map((ind) => (
+                            <div
+                                key={ind}
+                                className="draggable-item"
+                                draggable
+                                onDragStart={(e) => handleDragStart(e, ind)}
+                            >
+                                {ind}
                             </div>
                         ))}
                     </div>
