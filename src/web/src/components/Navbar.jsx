@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
+import { LiveSingleText } from "./LiveUI"
+import '../css/root.css';
+import "../css/Navbar.css"
 
 export default function Navbar() {
     const [now, setNow] = useState(new Date());
     const [themeLight, setThemeLight] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         const id = setInterval(() => setNow(new Date()), 1000);
@@ -56,13 +60,14 @@ export default function Navbar() {
                     <div className="sub">Welcome, User</div>
                 </span>
             </div>
+            <div className="topbar-center"><LiveSingleText className="search-bar" placeholder="Search" type="search" value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value) }}></LiveSingleText></div>
             <div style={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
                 gap: "15px"
             }}>
-                <div onClick={changeTheme}><p style={{ fontSize: "16px", fontWeight: "bolder", cursor: "pointer", color: "red", userSelect: "none"}}>{(themeLight === true ? "☾" : "𖤓")}</p></div>
+                <div onClick={changeTheme}><p style={{ fontSize: "16px", fontWeight: "bolder", cursor: "pointer", color: "red", userSelect: "none" }}>{(themeLight === true ? "☾" : "𖤓")}</p></div>
                 <time style={{ color: "var(--muted)" }}>{now.toLocaleString("en-IN", {
                     dateStyle: "full",
                     timeStyle: "long",
