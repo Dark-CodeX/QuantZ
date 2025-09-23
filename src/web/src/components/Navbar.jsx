@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 
 export default function Navbar() {
     const [now, setNow] = useState(new Date());
-    const [themeLight, setThemeLight] = useState(true);
+    const [themeLight, setThemeLight] = useState(false);
 
     useEffect(() => {
         const id = setInterval(() => setNow(new Date()), 1000);
+        changeTheme();
         return () => clearInterval(id);
     }, []);
 
