@@ -24,6 +24,7 @@ function FlowCanvas({ indicatorsList }) {
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [selectedNode, setSelectedNode] = useState(null);
+    const [nodeInputValue, setNodeInputValue] = useState("");
     const rfInstance = useReactFlow();
 
     // Node / Edge changes
@@ -68,18 +69,21 @@ function FlowCanvas({ indicatorsList }) {
     // Double click node -> open settings
     const onNodeDoubleClick = useCallback((event, node) => {
         setSelectedNode(node);
+
+        if (node.data.kind === "indicator") setNodeInputValue(node.data.period || "");
+        if (node.data.kind === "operator") setNodeInputValue(node.data.value || "");
     }, []);
 
-    const handleSettingChange = (key, value) => {
-        setNodes((nds) =>
-            nds.map((n) => {
-                if (n.id === selectedNode.id) {
-                    return { ...n, data: { ...n.data, [key]: value } };
-                }
-                return n;
-            })
-        );
+    const handleSettingChange = (key, v) => {
+        setNodes((nds) => {
+            const newNodes = nds.map((n) =>
+                n.id === selectedNode.id ? { ...n, data: { ...n.data, [key]: v } } : n
+            );
+            setSelectedNode(newNodes.find((n) => n.id === selectedNode.id));
+            return newNodes;
+        });
     };
+
 
     return (
         <div className="flow-area" onDrop={onDrop} onDragOver={onDragOver}>
@@ -107,10 +111,18 @@ function FlowCanvas({ indicatorsList }) {
                         <div>
                             <label>Value:</label>
                             <LiveSingleText
-                                value={selectedNode.data.value || ''}
-                                placeholder='Value'
-                                onChange={(e) => handleSettingChange('value', e.target.value)}
+                                value={nodeInputValue}
+                                placeholder="Value"
+                                onChange={(e) => setNodeInputValue(e.target.value)}
                             />
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                gap: "8px"
+                            }}>
+                                <LiveButton onClick={() => handleSettingChange(selectedNode.data.kind === "indicator" ? "period" : "value", nodeInputValue)} >Submit</LiveButton>
+                                <LiveButton onClick={() => setSelectedNode(null)} >Close</LiveButton>
+                            </div>
                         </div>
                     )}
 
@@ -118,14 +130,24 @@ function FlowCanvas({ indicatorsList }) {
                         <div>
                             <label>Period:</label>
                             <LiveSingleText
-                                value={selectedNode.data.period || ''}
-                                placeholder='Period'
-                                onChange={(e) => handleSettingChange('period', e.target.value)}
+                                value={nodeInputValue}
+                                placeholder="Period"
+                                onChange={(e) => setNodeInputValue(e.target.value)}
                             />
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                gap: "8px"
+                            }}>
+                                <LiveButton onClick={() => handleSettingChange(selectedNode.data.kind === "indicator" ? "period" : "value", nodeInputValue)} >Submit</LiveButton>
+                                <LiveButton onClick={() => setSelectedNode(null)} >Close</LiveButton>
+                            </div>
                         </div>
                     )}
 
-                    <LiveButton onClick={() => setSelectedNode(null)} >Close</LiveButton>
+                    {(selectedNode.data.kind === "action" || selectedNode.data.kind === "control") && (
+                        <LiveButton onClick={() => setSelectedNode(null)} >Close</LiveButton>
+                    )}
                 </div>
             )}
         </div>
