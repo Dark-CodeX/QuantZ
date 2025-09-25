@@ -231,6 +231,12 @@ export default function Main() {
 
             {/* Main Canvas */}
             <main className="main-area">
+                {/* Operation Panel */}
+                <div className="operation-panel">
+                    <LiveButton><span style={{color: "green"}}>&#9654;</span> Run</LiveButton>
+                    <LiveButton>Backtest</LiveButton>
+                    <LiveButton>Create ML Model</LiveButton>
+                </div>
                 <ReactFlowProvider>
                     <FlowCanvas indicatorsList={INDICATORS} />
                 </ReactFlowProvider>

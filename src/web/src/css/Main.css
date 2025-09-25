@@ -72,6 +72,25 @@ html,
     border: 2px solid var(--primary);
 }
 
+.operation-panel {
+    background: var(--panel);
+    color: var(--fg);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 8px;
+    display: flex;
+    gap: 12px;
+    flex-direction: row;
+    padding-left: 12px;
+}
+
+.operation-panel button {
+    padding: 7px 9px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+}
+
 .main-area {
     flex: 1;
     display: flex;
