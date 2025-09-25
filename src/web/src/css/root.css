@@ -1,13 +1,38 @@
 :root {
-  --bg: #f3f7fb;
-  --fg: #1e1e1e;
-  --muted: #6e6e6e;
-  --primary: #0a84ff;
-  --primary-dark: #0078d4;
-  --surface: #ffffff;
-  --panel: #f0f6ff;
-  --border: #c8d6f0;
-  --radius: 6px;
-  --shadow: 0 2px 6px rgba(10, 132, 255, 0.08);
-  --font:  "Segoe UI", system-ui, sans-serif;
+    --bg: #f3f7fb;
+    --fg: #1e1e1e;
+    --muted: #6e6e6e;
+    --primary: #0a84ff;
+    --primary-dark: #0078d4;
+    --surface: #ffffff;
+    --panel: #f0f6ff;
+    --border: #c8d6f0;
+    --radius: 6px;
+    --shadow: 0 2px 6px rgba(10, 132, 255, 0.08);
+    --font: "Segoe UI", system-ui, sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--panel);
+    border-radius: var(--radius);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: var(--radius);
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--muted);
+}
+
+* {
+    scrollbar-width: auto;
+    scrollbar-color: var(--border) var(--panel);
 }
