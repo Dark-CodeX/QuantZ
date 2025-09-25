@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../css/Home.css";
 import "../css/root.css";
+import { LiveButton } from "./LiveUI";
 
 export default function Home({ files, setFiles }) {
     const fileRef = useRef(null);
@@ -20,7 +21,18 @@ export default function Home({ files, setFiles }) {
     return (
         <div className="app">
             <div className="shell">
-                <aside className="side"><p style={{ fontSize: "17px", fontWeight: "bold", textAlign: "center" }}>Tools / Filters</p></aside>
+                <aside className="side">
+                    <div className="quick-access-panel">
+                        <p style={{ fontSize: "17px", fontWeight: "bold", textAlign: "center" }}>Quick Access</p>
+                        <LiveButton>Documentation</LiveButton>
+                        <LiveButton>Tutorials</LiveButton>
+                        <LiveButton onClick={() => { window.open("https://www.github.com/Dark-CodeX/QuantZ", '_blank').focus(); }}>Contribute &lt;/&gt;</LiveButton>
+                    </div>
+                    <div className="settings">
+                        <LiveButton>Settings</LiveButton>
+                        <LiveButton>Account</LiveButton>
+                    </div>
+                </aside>
 
                 <main>
                     <div className="grid">
