@@ -33,7 +33,7 @@ const LiveButton = ({ onClick, children, className = "" }) => {
     );
 };
 
-const LiveSingleText = ({ type = "text", placeholder = "", onClick, className = "" }) => {
+const LiveSingleText = ({ type = "text", placeholder = "", onClick, className = "", id = "", value = "", onChange }) => {
     const [hover, setHover] = useState(false);
 
     const baseStyles = {
@@ -59,6 +59,9 @@ const LiveSingleText = ({ type = "text", placeholder = "", onClick, className = 
             type={type}
             placeholder={placeholder}
             className={className}
+            id={id}
+            value={value}
+            onChange={onChange}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             onClick={onClick}
