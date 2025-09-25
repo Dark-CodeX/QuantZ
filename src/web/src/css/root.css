@@ -35,4 +35,6 @@
 * {
     scrollbar-width: auto;
     scrollbar-color: var(--border) var(--panel);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
