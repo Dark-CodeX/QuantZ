@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { LiveSingleText } from "./LiveUI"
+import { LiveButton, LiveSingleText } from "./LiveUI"
 import '../css/root.css';
 import "../css/Navbar.css"
 
@@ -7,6 +7,7 @@ export default function Navbar() {
     const [now, setNow] = useState(new Date());
     const [themeLight, setThemeLight] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [isHomePage, setIsHomePage] = useState(false);
 
     useEffect(() => {
         const id = setInterval(() => setNow(new Date()), 1000);
@@ -53,6 +54,9 @@ export default function Navbar() {
 
     return (
         <header className="topbar">
+            {!isHomePage &&
+                <LiveButton className="back-button"><svg fill="var(--fg)" width="30px" height="30px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M1.293,12.707a1,1,0,0,1,0-1.414l6-6A1,1,0,0,1,8.707,6.707L4.414,11H22a1,1,0,0,1,0,2H4.414l4.293,4.293a1,1,0,0,1-1.414,1.414Z" /></svg></LiveButton>
+            }
             <div className="brand">
                 <span className="logo">QZ</span>
                 <span>
