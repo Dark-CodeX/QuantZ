@@ -8,6 +8,12 @@
     box-shadow: var(--shadow);
 }
 
+.back-button {
+    margin-right: 15px;
+    height: 42px;
+    width: 42px;
+}
+
 .topbar-center {
     flex: 1;
     display: flex;
