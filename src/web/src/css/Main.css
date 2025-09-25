@@ -54,7 +54,7 @@ html,
     cursor: grab;
     user-select: none;
     text-align: center;
-    border: 1px solid var(--border);
+    border: 2px solid var(--border);
     box-shadow: var(--shadow);
     transition: transform 0.08s ease, box-shadow 0.08s ease;
     font-weight: 600;
@@ -66,9 +66,10 @@ html,
 }
 
 .draggable-item:hover {
-    box-shadow: 0 6px 14px rgba(10, 132, 255, 0.09);
+    box-shadow: 0 4px 12px rgba(10, 132, 255, 0.15);
     border-color: var(--primary);
     background: var(--panel);
+    border: 2px solid var(--primary);
 }
 
 .main-area {
