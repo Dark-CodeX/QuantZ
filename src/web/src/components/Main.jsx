@@ -52,7 +52,7 @@ function FlowCanvas({ indicatorsList }) {
                 type: 'default',
                 position,
                 data: { label: type, kind },
-                className: kind === 'indicator' ? 'node-indicator' : (kind === "operator" ? "node-operator" : (kind === "action" ? "node-action" : "node-control")),
+                className: kind === 'indicator' ? 'node-indicator' : (kind === "operator" ? "node-operator" : (kind === "action" ? "node-action" : (type === "Start" ? "node-control_start" : "node-control_end"))),
             };
 
             setNodes((nds) => nds.concat(newNode));
