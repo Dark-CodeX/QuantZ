@@ -38,10 +38,9 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList }) {
             const type = event.dataTransfer.getData("application/reactflow");
             if (!type) return;
 
-            const bounds = event.currentTarget.getBoundingClientRect();
-            const position = rfInstance.project({
-                x: event.clientX - bounds.left,
-                y: event.clientY - bounds.top,
+            const position = rfInstance.screenToFlowPosition({
+                x: event.clientX,
+                y: event.clientY,
             });
 
             const kind = indicatorsList.includes(type) ? "indicator" : (OPERATORS.includes(type) ? "operator" : (ACTIONS.includes(type) ? "action" : "control"));
@@ -258,8 +257,8 @@ export default function Main() {
                 {/* Operation Panel */}
                 <div className="operation-panel">
                     <LiveButton><span style={{ color: "green" }}>&#9654;</span> Run</LiveButton>
-                    <LiveButton>Backtest</LiveButton>
                     <LiveButton>Chart</LiveButton>
+                    <LiveButton>Backtest</LiveButton>
                     <LiveButton>Create ML Model</LiveButton>
                     <LiveButton onClick={() => {
                         const data = JSON.stringify(SaveStrategyJSON({ _nodes: nodes, _edges: edges }), null, 1);
@@ -269,6 +268,10 @@ export default function Main() {
                         element.click();
                         element.remove();
                     }}>Save Strategy</LiveButton>
+                    <LiveButton onClick={() => {
+                        setNodes([]);
+                        setEdges([]);
+                    }}>Clear Strategy</LiveButton>
                 </div>
                 <ReactFlowProvider>
                     <FlowCanvas nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} indicatorsList={INDICATORS} />
