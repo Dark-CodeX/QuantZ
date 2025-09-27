@@ -3,7 +3,7 @@ import "../css/root.css";
 import "../css/Home.css";
 import { LiveButton } from "./LiveUI";
 
-export default function Home({ files, setFiles }) {
+export default function Home({ file, setFile }) {
     const fileRef = useRef(null);
 
     function pickFile() {
@@ -13,8 +13,7 @@ export default function Home({ files, setFiles }) {
     function handleFile(e) {
         const f = e.target.files?.[0];
         if (!f) return;
-        const url = URL.createObjectURL(f);
-        setFiles([{ name: f.name, url: url }]);
+        setFile(f);
         e.target.value = null;
     }
 
@@ -42,7 +41,7 @@ export default function Home({ files, setFiles }) {
                             <small style={{ fontSize: "12px" }}>Upload a CSV</small>
                         </button>
 
-                        {files && files.map((f, i) => (
+                        {file && file.map((f, i) => (
                             <article key={i} className="card">
                                 <h3>{f.name}</h3>
                                 <a href={f.url} target="_blank" rel="noreferrer">
