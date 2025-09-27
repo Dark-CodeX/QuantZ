@@ -4,35 +4,15 @@ import '../css/root.css';
 import '../css/Main.css';
 import { LiveButton } from "./LiveUI";
 import { FlowCanvas, getId } from './FlowCanvas';
+import CandleCharts from './CandleCharts';
+import { SaveStrategyJSON } from './Helper';
 
 const INDICATORS = ["SMA", "EMA", "WMA", "VWMA", "MACD", "RSI", "BollingerBands", "ATR"];
 const OPERATORS = ["Equals To (=)", "Not Equals To (≠)", "Less Than (<)", "More Than (>)", "Less Than or Equals To (≤)", "More Than or Equals To (≥)"];
 const ACTIONS = ["Buy", "Sell"]
 const CONTROL_NODES = ["Start", "End"];
 
-function SaveStrategyJSON({ _nodes, _edges }) {
-    const processedNodes = _nodes.map((node) => {
-        return {
-            id: node.id,
-            data: node.data,
-            position: node.position,
-        };
-    });
-
-    const processedEdges = _edges.map((edge => {
-        return {
-            src: edge.source,
-            dest: edge.target
-        };
-    }));
-
-    return {
-        nodes: processedNodes,
-        edges: processedEdges
-    };
-}
-
-export default function Main({ files }) {
+export default function Main({ CSVData }) {
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [selectedPage, setSelectedPage] = useState("graph"); // graph, chart, backtest, ml_model
@@ -120,7 +100,7 @@ export default function Main({ files }) {
                     <LiveButton onClick={() => setSelectedPage("backtest")}>Backtest</LiveButton>
                     <LiveButton onClick={() => setSelectedPage("ml_model")}>Create ML Model</LiveButton>
                     <LiveButton onClick={() => {
-                        const data = JSON.stringify(SaveStrategyJSON({ _nodes: nodes, _edges: edges }), null, 1);
+                        const data = JSON.stringify(SaveStrategyJSON(nodes, edges), null, 1);
                         const element = document.createElement("a");
                         element.href = "data:application/json;charset=utf-8," + encodeURIComponent(data);
                         element.download = `strategy_${getId()}.json`;
@@ -140,7 +120,7 @@ export default function Main({ files }) {
                     </ReactFlowProvider>
                 }
                 {
-                    selectedPage === "chart" && <></>
+                    selectedPage === "chart" && <CandleCharts stockData={CSVData} ></CandleCharts>
                 }
             </main >
         </div >
