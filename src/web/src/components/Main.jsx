@@ -20,9 +20,8 @@ const CONTROL_NODES = ["Start", "End"];
 
 const getId = () => crypto.randomUUID();
 
-function FlowCanvas({ indicatorsList }) {
-    const [nodes, setNodes] = useState([]);
-    const [edges, setEdges] = useState([]);
+function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList }) {
+
     const [selectedNode, setSelectedNode] = useState(null);
     const [nodeInputValue, setNodeInputValue] = useState("");
     const rfInstance = useReactFlow();
@@ -154,7 +153,32 @@ function FlowCanvas({ indicatorsList }) {
     );
 }
 
+function SaveStrategyJSON({ _nodes, _edges }) {
+    const processedNodes = _nodes.map((node) => {
+        return {
+            id: node.id,
+            data: node.data,
+            position: node.position,
+        };
+    });
+
+    const processedEdges = _edges.map((edge => {
+        return {
+            src: edge.source,
+            dest: edge.target
+        };
+    }));
+
+    return {
+        nodes: processedNodes,
+        edges: processedEdges
+    };
+}
+
 export default function Main() {
+    const [nodes, setNodes] = useState([]);
+    const [edges, setEdges] = useState([]);
+
     const handleDragStart = (event, nodeType) => {
         event.dataTransfer.setData('application/reactflow', nodeType);
         event.dataTransfer.effectAllowed = 'move';
@@ -233,14 +257,23 @@ export default function Main() {
             <main className="main-area">
                 {/* Operation Panel */}
                 <div className="operation-panel">
-                    <LiveButton><span style={{color: "green"}}>&#9654;</span> Run</LiveButton>
+                    <LiveButton><span style={{ color: "green" }}>&#9654;</span> Run</LiveButton>
                     <LiveButton>Backtest</LiveButton>
+                    <LiveButton>Chart</LiveButton>
                     <LiveButton>Create ML Model</LiveButton>
+                    <LiveButton onClick={() => {
+                        const data = JSON.stringify(SaveStrategyJSON({ _nodes: nodes, _edges: edges }), null, 1);
+                        const element = document.createElement("a");
+                        element.href = "data:application/json;charset=utf-8," + encodeURIComponent(data);
+                        element.download = `strategy_${getId()}.json`;
+                        element.click();
+                        element.remove();
+                    }}>Save Strategy</LiveButton>
                 </div>
                 <ReactFlowProvider>
-                    <FlowCanvas indicatorsList={INDICATORS} />
+                    <FlowCanvas nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} indicatorsList={INDICATORS} />
                 </ReactFlowProvider>
-            </main>
-        </div>
+            </main >
+        </div >
     );
 }
