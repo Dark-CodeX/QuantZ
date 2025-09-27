@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { LiveButton, LiveSingleText } from "./LiveUI"
 import '../css/root.css';
 import "../css/Navbar.css"
+import { LiveButton, LiveSingleText } from "./LiveUI"
 
 export default function Navbar() {
     const [now, setNow] = useState(new Date());

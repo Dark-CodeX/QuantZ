@@ -1,4 +1,3 @@
-import { LiveButton, LiveSingleText } from "./LiveUI";
 import { useState, useCallback } from 'react';
 import ReactFlow, {
     Controls,
@@ -11,6 +10,7 @@ import ReactFlow, {
 import '../css/root.css';
 import '../css/FlowCanvas.css';
 import 'reactflow/dist/style.css';
+import { LiveButton, LiveSingleText } from "./LiveUI";
 
 const getId = () => crypto.randomUUID();
 
