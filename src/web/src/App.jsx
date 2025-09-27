@@ -1,18 +1,19 @@
 import Home from './components/Home'
 import Main from './components/Main';
 import Navbar from "./components/Navbar"
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 
 function App() {
-    const [files, setFiles] = useState(null);
+    const [file, setFile] = useState(null);
+    const [CSVData, setCSVData] = useState([]);
 
     return (
         <>
             <Navbar />
-            {!files ? (
-                <Home files={files} setFiles={setFiles} />
+            {!file ? (
+                <Home file={file} setFile={setFile} />
             ) : (
-                <Main files={files} />
+                <Main CSVData={CSVData} />
             )}
         </>
     );
