@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ReactFlowProvider } from 'reactflow';
 import '../css/root.css';
 import '../css/Main.css';
@@ -32,7 +32,7 @@ function SaveStrategyJSON({ _nodes, _edges }) {
     };
 }
 
-export default function Main() {
+export default function Main({ files }) {
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [selectedPage, setSelectedPage] = useState("graph"); // graph, chart, backtest, ml_model
