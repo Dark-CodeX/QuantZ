@@ -2,8 +2,9 @@ import { useRef } from "react";
 import "../css/root.css";
 import "../css/Home.css";
 import { LiveButton } from "./LiveUI";
+import { SendToBackend } from "./Helper"
 
-export default function Home({ file, setFile }) {
+export default function Home({ file, setFile, setCSVData }) {
     const fileRef = useRef(null);
 
     function pickFile() {
@@ -13,9 +14,21 @@ export default function Home({ file, setFile }) {
     function handleFile(e) {
         const f = e.target.files?.[0];
         if (!f) return;
+
         setFile(f);
+
+        const formData = new FormData();
+        formData.append("file", f);
+
+        SendToBackend(formData, "csv").then((response) => {
+            if (response !== null) setCSVData(JSON.parse(response));
+        }).catch((err) => {
+            console.error("Upload failed:", err);
+        });
+
         e.target.value = null;
     }
+
 
     return (
         <div className="app">
