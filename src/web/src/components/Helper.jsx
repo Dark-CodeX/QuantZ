@@ -19,4 +19,20 @@ function SaveStrategyJSON(_nodes, _edges) {
         edges: processedEdges
     };
 }
-export { SaveStrategyJSON };
+
+const SendToBackend = async (data, type) => {
+    try {
+        const response = await fetch(`http://localhost:9080/upload/${type}`, {
+            method: 'POST',
+            headers: data instanceof FormData ? {} : { 'Content-Type': 'text/plain' },
+            body: data
+        });
+        return await response.text();
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
+    }
+};
+
+
+export { SaveStrategyJSON, SendToBackend };
