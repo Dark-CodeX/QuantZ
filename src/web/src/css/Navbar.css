@@ -27,14 +27,15 @@
 }
 
 .logo {
+    border-radius: var(--radius);
+    display: block;
+}
+
+.logo>img {
     width: 40px;
     height: 40px;
-    display: grid;
-    place-items: center;
-    background: var(--primary);
-    color: #fff;
     border-radius: var(--radius);
-    font-weight: bolder;
+    display: block;
 }
 
 .title {
