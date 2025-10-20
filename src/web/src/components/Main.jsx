@@ -16,7 +16,7 @@ export default function Main({ CSVData }) {
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [selectedPage, setSelectedPage] = useState("graph"); // graph, chart, backtest, ml_model
-    const [indicatorLines, setIndicatorLines] = useState([]);
+    const [indicatorLines, setIndicatorLines] = useState({});
 
     const handleDragStart = (event, nodeType) => {
         event.dataTransfer.setData('application/reactflow', nodeType);
@@ -122,7 +122,7 @@ export default function Main({ CSVData }) {
                     </ReactFlowProvider>
                 }
                 {
-                    selectedPage === "chart" && <CandlestickChart data={CSVData} lines={indicatorLines} />
+                    selectedPage === "chart" && <CandlestickChart data={CSVData} indicatorLines={indicatorLines} />
                 }
             </main >
         </div >
