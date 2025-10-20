@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useEffect } from 'react';
 import Plot from 'react-plotly.js';
 import "../css/root.css";
 
-export default function CandlestickChart({ data, lines }) {
+export default function CandlestickChart({ data, indicatorLines }) {
     // Predefine formatter (avoid expensive per-iteration locale parsing)
     const dateFormatter = useMemo(() =>
         new Intl.DateTimeFormat('en-US', {
@@ -58,33 +58,31 @@ export default function CandlestickChart({ data, lines }) {
 
     // Consistent vibrant colors
     const colors = useMemo(() => [
-        '#FF1493', '#00FFFF', '#FFD700', '#8A2BE2', '#FF4500', '#00FA9A', '#FF69B4',
-        '#1E90FF', '#FFFF00', '#FF00FF', '#00CED1', '#FFA500', '#9370DB', '#32CD32',
-        '#FF1493', '#00BFFF', '#FFD700', '#DA70D6', '#FF6347', '#40E0D0', '#ADFF2F',
-        '#FF00FF', '#1E90FF', '#FF8C00', '#BA55D3', '#00FF7F', '#FF69B4', '#4169E1',
-        '#FFFF54', '#FF1493'
+        '#FF8C00', '#1E90FF', '#8A2BE2', '#00CED1', '#FFD700', '#FF1493', '#9400D3', '#00BFFF', '#FF4500',
+        '#40E0D0', '#DAA520', '#8B008B', '#20B2AA', '#FF69B4', '#4169E1', '#FF6347', '#48D1CC', '#9932CC',
+        '#FF8C69', '#4682B4', '#D2691E', '#7B68EE', '#00FA9A', '#FF00FF', '#1C86EE', '#DA70D6', '#00CED1',
+        '#FF7F50', '#6A5ACD', '#B0C4DE'
     ], []);
+
+
 
     // Generate overlay indicator lines
     const lineTraces = useMemo(() => {
-        if (!lines?.length) return [];
+        if (!indicatorLines || Object.keys(indicatorLines).length === 0) return [];
 
-        return lines.map((lineObj, i) => {
-            const [indicatorName, values] = Object.entries(lineObj)[0];
-            return {
-                type: 'scatter',
-                mode: 'lines',
-                name: indicatorName,
-                x: dates,
-                y: values,
-                line: {
-                    width: 2,
-                    color: colors[i % colors.length],
-                },
-                hovertemplate: `<b>${indicatorName}</b><br>%{y:.2f}<extra></extra>`,
-            };
-        });
-    }, [lines, dates, colors]);
+        return Object.entries(indicatorLines).map(([id, lineData], i) => ({
+            type: 'scatter',
+            mode: 'lines',
+            name: lineData.l,
+            x: dates,
+            y: lineData.a,
+            line: {
+                width: 2,
+                color: colors[i % colors.length],
+            },
+            hovertemplate: `<b>${lineData.l}</b><br>%{y:.2f}<extra></extra>`,
+        }));
+    }, [indicatorLines, dates, colors]);
 
     const volumeColors = useMemo(() =>
         closes.map((c, i) => (c > opens[i] ? '#00c853' : '#d32f2f'))
