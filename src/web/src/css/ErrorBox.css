@@ -1,0 +1,47 @@
+.error-box {
+    top: 20px;
+    left: 20px;
+    padding: 3px 12px;
+    background-color: rgba(255, 32, 10, 0.08);
+    display: block;
+    position: absolute;
+    border-radius: 8px;
+    z-index: 100;
+}
+
+.error-box-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-items: stretch;
+}
+
+.error-box-container>button {
+    height: 18px !important;
+    width: 18px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background: transparent !important;
+    color: #ff4d4d !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease !important;
+}
+
+.error-box-container>button:hover {
+    background: rgba(255, 0, 0, 0.1) !important;
+    color: #ff0000 !important;
+    transform: scale(1.1) !important;
+}
+
+.error-box>p {
+    font-size: 14px;
+    color: var(--fg);
+    font-weight: 500;
+    font-family: var(--font);
+}
