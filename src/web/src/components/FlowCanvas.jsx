@@ -11,10 +11,11 @@ import '../css/root.css';
 import '../css/FlowCanvas.css';
 import 'reactflow/dist/style.css';
 import { LiveButton, LiveSingleText } from "./LiveUI";
+import { SendToBackend } from "./Helper"
 
 const getId = () => crypto.randomUUID();
 
-function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operatorsList, actionsList, controlList }) {
+function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operatorsList, actionsList, controlList, setIndicatorLines }) {
 
     const [selectedNode, setSelectedNode] = useState(null);
     const [nodeInputValue, setNodeInputValue] = useState("");
@@ -49,6 +50,9 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
             };
 
             setNodes((nds) => nds.concat(newNode));
+            setSelectedNode(newNode);
+            if (kind === "indicator") setNodeInputValue(newNode.data.period || "");
+            if (kind === "operator") setNodeInputValue(newNode.data.value || "");
         },
         [rfInstance, indicatorsList]
     );
@@ -67,14 +71,17 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
     }, []);
 
     const handleSettingChange = (key, v) => {
-        setNodes((nds) => {
-            const newNodes = nds.map((n) =>
+        setNodes((nds) =>
+            nds.map((n) =>
                 n.id === selectedNode.id ? { ...n, data: { ...n.data, [key]: v } } : n
-            );
-            setSelectedNode(newNodes.find((n) => n.id === selectedNode.id));
-            return newNodes;
-        });
+            )
+        );
+        setSelectedNode((prevNode) => ({
+            ...prevNode,
+            data: { ...prevNode.data, [key]: v }
+        }));
     };
+
 
 
     return (
@@ -112,7 +119,7 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
                                 flexDirection: "row",
                                 gap: "8px"
                             }}>
-                                <LiveButton onClick={() => handleSettingChange(selectedNode.data.kind === "indicator" ? "period" : "value", nodeInputValue)} >Submit</LiveButton>
+                                <LiveButton onClick={() => handleSettingChange("value", nodeInputValue)} >Submit</LiveButton>
                                 <LiveButton onClick={() => setSelectedNode(null)} >Close</LiveButton>
                             </div>
                         </div>
@@ -131,7 +138,23 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
                                 flexDirection: "row",
                                 gap: "8px"
                             }}>
-                                <LiveButton onClick={() => handleSettingChange(selectedNode.data.kind === "indicator" ? "period" : "value", nodeInputValue)} >Submit</LiveButton>
+                                <LiveButton onClick={() => {
+                                    handleSettingChange("period", nodeInputValue);
+                                    if (nodeInputValue !== "")
+                                        SendToBackend(
+                                            JSON.stringify({ period: parseInt(nodeInputValue, 10) }, null, 1),
+                                            `/indicators/${selectedNode.data.label}`,
+                                            "application/json")
+                                            .then((res) => {
+                                                const parsedArray = JSON.parse(res.replace(/nan/g, 'null'));
+
+                                                setIndicatorLines(prevLines => [
+                                                    ...prevLines,
+                                                    { [selectedNode.data.label + nodeInputValue]: parsedArray }
+                                                ])
+                                            })
+                                            .catch((err) => { console.error(err) })
+                                }} >Submit</LiveButton>
                                 <LiveButton onClick={() => setSelectedNode(null)} >Close</LiveButton>
                             </div>
                         </div>
