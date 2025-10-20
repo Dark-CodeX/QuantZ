@@ -1,81 +1,76 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useEffect } from 'react';
 import Plot from 'react-plotly.js';
-import "../css/root.css"
+import "../css/root.css";
 
 export default function CandlestickChart({ data, lines }) {
-    // Expect data = [{date, open, high, low, close}, ...]
-    // Expect lines = [{ "SMA": [null, null, ...] }, { "EMA": [...] }]
+    // Predefine formatter (avoid expensive per-iteration locale parsing)
+    const dateFormatter = useMemo(() =>
+        new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        }), []
+    );
 
-    const { dates, opens, highs, lows, closes, hoverText } = useMemo(() => {
-        const d = { dates: [], opens: [], highs: [], lows: [], closes: [], hoverText: [] };
-        for (const point of data) {
-            const date = new Date(point.date);
-            d.dates.push(date);
-            d.opens.push(point.open);
-            d.highs.push(point.high);
-            d.lows.push(point.low);
-            d.closes.push(point.close);
+    const plotRef = useRef();
 
-            // Create custom hover text for each data point
-            const formattedDate = date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
+    useEffect(() => {
+        if (plotRef.current && plotRef.current.el) {
+            // Force Plotly to resize once mounted
+            window.requestAnimationFrame(() => {
+                Plotly.Plots.resize(plotRef.current.el);
             });
-
-            d.hoverText.push(
-                `<b>${formattedDate}</b><br>` +
-                `Open: $${point.open.toFixed(2)}<br>` +
-                `High: $${point.high.toFixed(2)}<br>` +
-                `Low: $${point.low.toFixed(2)}<br>` +
-                `Close: $${point.close.toFixed(2)}`
-            );
         }
-        return d;
-    }, [data]);
+    }, []); // only on mount
 
-    const colors = [
-        '#FF1493',  // Deep Pink (magenta family)
-        '#00FFFF',  // Cyan (bright blue-green)
-        '#FFD700',  // Gold (yellow)
-        '#8A2BE2',  // Blue Violet (purple)
-        '#FF4500',  // Orange Red
-        '#00FA9A',  // Medium Spring Green
-        '#FF69B4',  // Hot Pink
-        '#1E90FF',  // Dodger Blue
-        '#FFFF00',  // Pure Yellow
-        '#FF00FF',  // Magenta
-        '#00CED1',  // Dark Turquoise
-        '#FFA500',  // Orange
-        '#9370DB',  // Medium Purple
-        '#32CD32',  // Lime Green
-        '#FF1493',  // Deep Pink
-        '#00BFFF',  // Deep Sky Blue
-        '#FFD700',  // Gold
-        '#DA70D6',  // Orchid
-        '#FF6347',  // Tomato
-        '#40E0D0',  // Turquoise
-        '#ADFF2F',  // Green Yellow
-        '#FF00FF',  // Fuchsia
-        '#1E90FF',  // Dodger Blue
-        '#FF8C00',  // Dark Orange
-        '#BA55D3',  // Medium Orchid
-        '#00FF7F',  // Spring Green
-        '#FF69B4',  // Hot Pink
-        '#4169E1',  // Royal Blue
-        '#FFFF54',  // Laser Lemon
-        '#FF1493',  // Deep Pink
-    ];
+    // Extract arrays once
+    const { dates, opens, highs, lows, closes, volumes, hoverText } = useMemo(() => {
+        const len = data.length;
+        const dates = new Array(len);
+        const opens = new Array(len);
+        const highs = new Array(len);
+        const lows = new Array(len);
+        const closes = new Array(len);
+        const volumes = new Array(len);
+        const hoverText = new Array(len);
 
+        for (let i = 0; i < len; i++) {
+            const { date, open, high, low, close, volume } = data[i];
+            const d = new Date(date);
+            dates[i] = d;
+            opens[i] = open;
+            highs[i] = high;
+            lows[i] = low;
+            closes[i] = close;
+            volumes[i] = volume;
 
-    // Create line traces from indicator lines
+            hoverText[i] =
+                `<b>${dateFormatter.format(d)}</b><br>` +
+                `Open: $${open.toFixed(2)}<br>` +
+                `High: $${high.toFixed(2)}<br>` +
+                `Low: $${low.toFixed(2)}<br>` +
+                `Close: $${close.toFixed(2)}<br>` +
+                `Volume: ${volume.toLocaleString()}`;
+        }
+
+        return { dates, opens, highs, lows, closes, volumes, hoverText };
+    }, [data, dateFormatter]);
+
+    // Consistent vibrant colors
+    const colors = useMemo(() => [
+        '#FF1493', '#00FFFF', '#FFD700', '#8A2BE2', '#FF4500', '#00FA9A', '#FF69B4',
+        '#1E90FF', '#FFFF00', '#FF00FF', '#00CED1', '#FFA500', '#9370DB', '#32CD32',
+        '#FF1493', '#00BFFF', '#FFD700', '#DA70D6', '#FF6347', '#40E0D0', '#ADFF2F',
+        '#FF00FF', '#1E90FF', '#FF8C00', '#BA55D3', '#00FF7F', '#FF69B4', '#4169E1',
+        '#FFFF54', '#FF1493'
+    ], []);
+
+    // Generate overlay indicator lines
     const lineTraces = useMemo(() => {
-        if (!lines || lines.length === 0) return [];
+        if (!lines?.length) return [];
 
-        return lines.map((lineObj, index) => {
-            const indicatorName = Object.keys(lineObj)[0];
-            const values = lineObj[indicatorName];
-
+        return lines.map((lineObj, i) => {
+            const [indicatorName, values] = Object.entries(lineObj)[0];
             return {
                 type: 'scatter',
                 mode: 'lines',
@@ -84,15 +79,21 @@ export default function CandlestickChart({ data, lines }) {
                 y: values,
                 line: {
                     width: 2,
-                    color: colors[index % colors.length],
+                    color: colors[i % colors.length],
                 },
                 hovertemplate: `<b>${indicatorName}</b><br>%{y:.2f}<extra></extra>`,
             };
         });
-    }, [lines, dates]);
+    }, [lines, dates, colors]);
+
+    const volumeColors = useMemo(() =>
+        closes.map((c, i) => (c > opens[i] ? '#00c853' : '#d32f2f'))
+        , [closes, opens]);
+
 
     return (
         <Plot
+            ref={plotRef}
             data={[
                 {
                     type: 'candlestick',
@@ -106,19 +107,30 @@ export default function CandlestickChart({ data, lines }) {
                     text: hoverText,
                     hoverinfo: 'text',
                 },
-                ...lineTraces  // Spread the line traces here
+                ...lineTraces,
+                {
+                    type: 'bar',
+                    x: dates,
+                    y: volumes,
+                    name: 'Volume',
+                    marker: { color: volumeColors },
+                    yaxis: 'y2',
+                    opacity: 0.6,
+                    hovertemplate: `<b>%{x}</b><br>Volume: %{y}<extra></extra>`,
+                }
             ]}
             layout={{
-                margin: { t: 30, r: 20, l: 60, b: 40 },
+                margin: { t: 30, r: 10, l: 40, b: 40 },
                 dragmode: 'pan',
                 hovermode: 'x',
                 showlegend: true,
                 legend: {
                     orientation: 'h',
+                    y: 1.05,
                     x: 0,
-                    xanchor: "left",
-                    yanchor: "top",
-                    y: 1,
+                    xanchor: 'left',
+                    traceorder: 'normal',
+                    itemwidth: 50,
                     font: { size: 11, color: '#708090' }
                 },
                 xaxis: {
@@ -126,9 +138,8 @@ export default function CandlestickChart({ data, lines }) {
                     showgrid: false,
                     tickformat: '%b %d %y',
                     tickangle: -45,
-                    tickfont: { color: "#708090", weight: "bold", size: 10 },
+                    tickfont: { color: "#708090", weight: "bold", size: 11 },
                     rangeslider: { visible: false },
-                    fixedrange: false,
                     showspikes: true,
                     spikemode: 'across',
                     spikesnap: 'cursor',
@@ -137,10 +148,22 @@ export default function CandlestickChart({ data, lines }) {
                     spikedash: "longdash",
                 },
                 yaxis: {
+                    domain: [0.25, 1],
                     showgrid: true,
                     gridcolor: 'rgba(112, 128, 144,0.1)',
                     tickfont: { color: "#708090", weight: "bold", size: 11 },
-                    fixedrange: false,
+                    showspikes: true,
+                    spikemode: 'across+marker',
+                    spikesnap: 'cursor',
+                    spikecolor: '#708090',
+                    spikethickness: -2,
+                    spikedash: "longdash",
+                },
+                yaxis2: {
+                    domain: [0, 0.2],
+                    showgrid: true,
+                    gridcolor: 'rgba(112, 128, 144,0.1)',
+                    tickfont: { color: "#708090", weight: "bold", size: 11 },
                     showspikes: true,
                     spikemode: 'across+marker',
                     spikesnap: 'cursor',
