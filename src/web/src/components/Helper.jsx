@@ -20,11 +20,11 @@ function SaveStrategyJSON(_nodes, _edges) {
     };
 }
 
-const SendToBackend = async (data, type) => {
+const SendToBackend = async (data, type, content_type) => {
     try {
-        const response = await fetch(`http://localhost:9080/upload/${type}`, {
+        const response = await fetch(`http://localhost:9080${type}`, {
             method: 'POST',
-            headers: data instanceof FormData ? {} : { 'Content-Type': 'text/plain' },
+            headers: data instanceof FormData ? {} : { 'Content-Type': content_type },
             body: data
         });
         return await response.text();
