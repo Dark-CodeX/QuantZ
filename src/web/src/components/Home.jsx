@@ -21,7 +21,7 @@ export default function Home({ file, setFile, setCSVData }) {
         formData.append("file", f);
 
         SendToBackend(formData, "/upload/csv", null).then((response) => {
-            if (response !== null) setCSVData(JSON.parse(response));
+            if (response.status === 200) setCSVData(JSON.parse(response.body));
         }).catch((err) => {
             console.error("Upload failed:", err);
         });
