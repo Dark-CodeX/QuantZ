@@ -11,7 +11,7 @@ function App() {
         <>
             <Navbar />
             {!file ? (
-                <Home file={file} setFile={setFile} />
+                <Home file={file} setFile={setFile} setCSVData={setCSVData} />
             ) : (
                 <Main CSVData={CSVData} />
             )}
