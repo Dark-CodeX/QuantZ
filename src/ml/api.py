@@ -58,7 +58,7 @@ def indicators(indicator):
         return str(qz.RSI(global_df["close"], period))
     elif indicator == "ATR":
         return str(qz.ATR(global_df["high"], global_df["low"], global_df["close"], period))
-    return "Unknown indicator", 400
+    return f"Error: unknown indicator '{indicator}'", 400
 
 
 if __name__ == '__main__':
