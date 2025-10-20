@@ -1,15 +1,20 @@
-.error-box {
+.error-box-container-parent {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-items: normal;
+    overflow-y: auto;
+    max-height: 400px;
     top: 20px;
     left: 20px;
-    padding: 3px 12px;
-    background-color: rgba(255, 32, 10, 0.08);
-    display: block;
     position: absolute;
-    border-radius: 8px;
     z-index: 100;
 }
 
 .error-box-container {
+    background-color: rgba(255, 32, 10, 0.08);
+    padding: 3px 12px;
+    border-radius: 10px;
     display: flex;
     flex-direction: row;
     gap: 20px;
