@@ -24,7 +24,14 @@ html,
     padding: 16px;
     border-right: 1px solid var(--border);
     box-shadow: var(--shadow);
-    overflow: auto;
+    overflow: hidden;
+    transition: width 0.2s ease-in-out, padding 0.2s ease-in-out;
+}
+
+.left-panel.collapsed {
+    width: 0;
+    padding: 0;
+    border-right: none;
 }
 
 .panel-section {
@@ -102,4 +109,9 @@ html,
     .left-panel {
         display: none;
     }
+}
+
+.selected-button {
+    box-sizing: border-box !important;
+    border-bottom: 2px solid var(--primary) !important;
 }
