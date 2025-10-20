@@ -17,7 +17,6 @@ import ErrorBox from './ErrorBox';
 const getId = () => crypto.randomUUID();
 
 function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operatorsList, actionsList, controlList, setIndicatorLines }) {
-
     const [selectedNode, setSelectedNode] = useState(null);
     const [nodeInputValue, setNodeInputValue] = useState("");
     const [errorMessage, setErrorMessage] = useState([]);
@@ -30,8 +29,6 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
         }, 1500);
         return () => clearTimeout(timer);
     }, [errorMessage]);
-
-
 
     // Node / Edge changes
     const onNodesChange = useCallback((changes) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
@@ -51,7 +48,6 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
             });
 
             const kind = indicatorsList.includes(type) ? "indicator" : (operatorsList.includes(type) ? "operator" : (actionsList.includes(type) ? "action" : "control"));
-
 
             const newNode = {
                 id: getId(),
@@ -157,20 +153,20 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
                                         SendToBackend(
                                             JSON.stringify({ period: parseInt(nodeInputValue, 10) }, null, 1),
                                             `/indicators/${selectedNode.data.label}`,
-                                            "application/json")
+                                            "application/json"
+                                        )
                                             .then((res) => {
                                                 if (res.status === 400) {
-                                                    setErrorMessage(prev => [...prev, res.body]);
+                                                    setErrorMessage((prev) => [...prev, res.body]);
                                                 } else {
-                                                    const parsedArray = JSON.parse(res.body.replace(/nan/g, 'null'));
-
-                                                    setIndicatorLines(prevLines => [
+                                                    const parsedArray = JSON.parse(res.body.replace(/\bnan\b/g, 'null'));
+                                                    setIndicatorLines((prevLines) => ({
                                                         ...prevLines,
-                                                        { [selectedNode.data.label + nodeInputValue]: parsedArray }
-                                                    ])
+                                                        [selectedNode.id]: {l: selectedNode.data.label + nodeInputValue, a: parsedArray},
+                                                    }));
                                                 }
                                             })
-                                            .catch((err) => setErrorMessage(err.toString()))
+                                            .catch((err) => setErrorMessage((prev) => [...prev, err.toString()]));
                                 }} >Submit</LiveButton>
                                 <LiveButton onClick={() => setSelectedNode(null)} >Close</LiveButton>
                             </div>
