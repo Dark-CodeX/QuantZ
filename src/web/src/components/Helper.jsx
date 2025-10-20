@@ -27,10 +27,19 @@ const SendToBackend = async (data, type, content_type) => {
             headers: data instanceof FormData ? {} : { 'Content-Type': content_type },
             body: data
         });
-        return await response.text();
+
+        const body = await response.text();
+
+        return {
+            status: response.status,
+            body: body
+        };
     } catch (error) {
         console.error('Error:', error);
-        return null;
+        return {
+            status: 0,
+            body: null
+        };
     }
 };
 
