@@ -4,8 +4,8 @@ import '../css/root.css';
 import '../css/Main.css';
 import { LiveButton } from "./LiveUI";
 import { FlowCanvas, getId } from './FlowCanvas';
-import CandleCharts from './CandleCharts';
 import { SaveStrategyJSON } from './Helper';
+import CandlestickChart from './CandlestickChart';
 
 const INDICATORS = ["SMA", "EMA", "WMA", "VWMA", "MACD", "RSI", "BollingerBands", "ATR"];
 const OPERATORS = ["Equals To (=)", "Not Equals To (≠)", "Less Than (<)", "More Than (>)", "Less Than or Equals To (≤)", "More Than or Equals To (≥)"];
@@ -16,6 +16,7 @@ export default function Main({ CSVData }) {
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [selectedPage, setSelectedPage] = useState("graph"); // graph, chart, backtest, ml_model
+    const [indicatorLines, setIndicatorLines] = useState([]);
 
     const handleDragStart = (event, nodeType) => {
         event.dataTransfer.setData('application/reactflow', nodeType);
@@ -25,7 +26,7 @@ export default function Main({ CSVData }) {
     return (
         <div className="main-container">
             {/* Left Panel */}
-            <aside className="left-panel">
+            <aside className="left-panel" id="left-panel">
                 <details className="panel-section">
                     <summary>Indicators</summary>
                     <div className="items">
@@ -96,9 +97,10 @@ export default function Main({ CSVData }) {
                 {/* Operation Panel */}
                 <div className="operation-panel">
                     <LiveButton><span style={{ color: "green" }}>&#9654;</span> Run</LiveButton>
-                    <LiveButton onClick={() => setSelectedPage("chart")}>Chart</LiveButton>
-                    <LiveButton onClick={() => setSelectedPage("backtest")}>Backtest</LiveButton>
-                    <LiveButton onClick={() => setSelectedPage("ml_model")}>Create ML Model</LiveButton>
+                    <LiveButton className="selected-button" id="graph" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("graph"); document.getElementById("left-panel").classList.remove("collapsed"); }}>Graph</LiveButton>
+                    <LiveButton id="chart" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("chart"); document.getElementById("left-panel").classList.add("collapsed");  }}>Chart</LiveButton>
+                    <LiveButton id="backtest" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("backtest"); document.getElementById("left-panel").classList.add("collapsed");  }}>Backtest</LiveButton>
+                    <LiveButton id="ml_model" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("ml_model"); document.getElementById("left-panel").classList.add("collapsed");  }}>Create ML Model</LiveButton>
                     <LiveButton onClick={() => {
                         const data = JSON.stringify(SaveStrategyJSON(nodes, edges), null, 1);
                         const element = document.createElement("a");
@@ -116,11 +118,11 @@ export default function Main({ CSVData }) {
                     selectedPage === "graph" &&
                     <ReactFlowProvider>
                         <FlowCanvas nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges}
-                            indicatorsList={INDICATORS} operatorsList={OPERATORS} actionsList={ACTIONS} controlList={CONTROL_NODES} />
+                            indicatorsList={INDICATORS} operatorsList={OPERATORS} actionsList={ACTIONS} controlList={CONTROL_NODES} setIndicatorLines={setIndicatorLines} />
                     </ReactFlowProvider>
                 }
                 {
-                    selectedPage === "chart" && <CandleCharts stockData={CSVData} ></CandleCharts>
+                    selectedPage === "chart" && <CandlestickChart data={CSVData} lines={indicatorLines} />
                 }
             </main >
         </div >
