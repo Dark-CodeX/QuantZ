@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import ReactFlow, {
     Controls,
     addEdge,
@@ -12,6 +12,7 @@ import '../css/FlowCanvas.css';
 import 'reactflow/dist/style.css';
 import { LiveButton, LiveSingleText } from "./LiveUI";
 import { SendToBackend } from "./Helper"
+import ErrorBox from './ErrorBox';
 
 const getId = () => crypto.randomUUID();
 
@@ -19,7 +20,18 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
 
     const [selectedNode, setSelectedNode] = useState(null);
     const [nodeInputValue, setNodeInputValue] = useState("");
+    const [errorMessage, setErrorMessage] = useState([]);
     const rfInstance = useReactFlow();
+
+    useEffect(() => {
+        if (!errorMessage.length) return;
+        const timer = setTimeout(() => {
+            setErrorMessage((prev) => prev.slice(1)); // remove first message immutably
+        }, 1500);
+        return () => clearTimeout(timer);
+    }, [errorMessage]);
+
+
 
     // Node / Edge changes
     const onNodesChange = useCallback((changes) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
@@ -82,8 +94,6 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
         }));
     };
 
-
-
     return (
         <div className="flow-area" onDrop={onDrop} onDragOver={onDragOver}>
             <ReactFlow
@@ -100,6 +110,9 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
                 <Controls />
                 <Background color="var(--fg)" size={0.5} />
             </ReactFlow>
+            {errorMessage && (
+                <ErrorBox msg={errorMessage} />
+            )}
 
             {/* Settings Panel */}
             {selectedNode && (
@@ -146,14 +159,18 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
                                             `/indicators/${selectedNode.data.label}`,
                                             "application/json")
                                             .then((res) => {
-                                                const parsedArray = JSON.parse(res.replace(/nan/g, 'null'));
+                                                if (res.status === 400) {
+                                                    setErrorMessage(prev => [...prev, res.body]);
+                                                } else {
+                                                    const parsedArray = JSON.parse(res.body.replace(/nan/g, 'null'));
 
-                                                setIndicatorLines(prevLines => [
-                                                    ...prevLines,
-                                                    { [selectedNode.data.label + nodeInputValue]: parsedArray }
-                                                ])
+                                                    setIndicatorLines(prevLines => [
+                                                        ...prevLines,
+                                                        { [selectedNode.data.label + nodeInputValue]: parsedArray }
+                                                    ])
+                                                }
                                             })
-                                            .catch((err) => { console.error(err) })
+                                            .catch((err) => setErrorMessage(err.toString()))
                                 }} >Submit</LiveButton>
                                 <LiveButton onClick={() => setSelectedNode(null)} >Close</LiveButton>
                             </div>
