@@ -112,6 +112,7 @@ export default function Main({ CSVData }) {
                     <LiveButton onClick={() => {
                         setNodes([]);
                         setEdges([]);
+                        setIndicatorLines({});
                     }}>Clear Strategy</LiveButton>
                 </div>
                 {
