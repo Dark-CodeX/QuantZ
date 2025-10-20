@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../css/root.css";
 
-const LiveButton = ({ onClick, children, className = "" }) => {
+const LiveButton = ({ onClick, children, className = "", id = "" }) => {
     const [hover, setHover] = useState(false);
 
     const baseStyles = {
@@ -24,6 +24,7 @@ const LiveButton = ({ onClick, children, className = "" }) => {
         <button
             style={baseStyles}
             className={className}
+            id={id}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             onClick={onClick}
