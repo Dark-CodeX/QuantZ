@@ -11,16 +11,16 @@ ext_modules = [
     Extension(
         "quantzlib",
         [
-            "bindings.cc",
-            "core/simd_math/simd_math.c",
-            "core/indicators/indicators.cc",
+            "./src/bindings.cc",
+            "./src/core/simd_math/simd_math.c",
+            "./src/core/indicators/indicators.cc",
         ],
         include_dirs=[
             pybind11.get_include(),
             pybind11.get_include(user=True),
             sysconfig.get_paths()["include"],
-            "./core/simd_math",
-            "./core/indicators",
+            "./src/core/simd_math",
+            "./src/core/indicators",
         ],
         language="c++",
         extra_compile_args=["-std=c++20", "-mfma"],
