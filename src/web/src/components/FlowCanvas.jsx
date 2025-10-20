@@ -107,7 +107,7 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
                 <Background color="var(--fg)" size={0.5} />
             </ReactFlow>
             {errorMessage && (
-                <ErrorBox msg={errorMessage} />
+                <ErrorBox msg={errorMessage} setErrorMessage={setErrorMessage} />
             )}
 
             {/* Settings Panel */}
@@ -162,7 +162,7 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
                                                     const parsedArray = JSON.parse(res.body.replace(/\bnan\b/g, 'null'));
                                                     setIndicatorLines((prevLines) => ({
                                                         ...prevLines,
-                                                        [selectedNode.id]: {l: selectedNode.data.label + nodeInputValue, a: parsedArray},
+                                                        [selectedNode.id]: { l: selectedNode.data.label + nodeInputValue, a: parsedArray },
                                                     }));
                                                 }
                                             })
