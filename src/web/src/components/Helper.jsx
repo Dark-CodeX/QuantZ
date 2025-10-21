@@ -20,28 +20,24 @@ function SaveStrategyJSON(_nodes, _edges) {
     };
 }
 
+const BASE_URL = "https://pyquantz.onrender.com";
+
 const SendToBackend = async (data, type, content_type) => {
     try {
-        const response = await fetch(`http://localhost:9080${type}`, {
+        const response = await fetch(`${BASE_URL}${type}`, {
             method: 'POST',
             headers: data instanceof FormData ? {} : { 'Content-Type': content_type },
             body: data
         });
 
         const body = await response.text();
-
-        return {
-            status: response.status,
-            body: body
-        };
+        return { status: response.status, body: body };
     } catch (error) {
         console.error('Error:', error);
-        return {
-            status: 0,
-            body: null
-        };
+        return { status: 0, body: null };
     }
 };
+
 
 
 export { SaveStrategyJSON, SendToBackend };
