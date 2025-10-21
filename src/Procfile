@@ -1,0 +1,1 @@
+web: pip install . && python ./ml/api.py

@@ -1,0 +1,6 @@
+flask
+flask-cors
+pandas
+pybind11
+setuptools
+wheel
