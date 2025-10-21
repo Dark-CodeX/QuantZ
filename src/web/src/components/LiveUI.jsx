@@ -102,7 +102,7 @@ const LiveSelect = ({ className = "", id = "", value, options, onChange, onClick
             onMouseLeave={() => setHover(false)}>
             {options && options.map((i) => {
                 return (
-                    <option value={i}>{i}</option>
+                    <option key={i} value={i}>{i}</option>
                 );
             })}
         </select>
