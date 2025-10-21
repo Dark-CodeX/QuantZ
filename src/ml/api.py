@@ -32,7 +32,7 @@ def CleanCSV(data):
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://quantz-ui.onrender.com"])
 
 
 @app.route("/upload/<type>", methods=["POST"])
