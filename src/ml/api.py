@@ -7,7 +7,6 @@ import quantzlib as qz
 
 global_df = None  # better to use None
 
-
 def CleanCSV(data):
     global global_df
     df = pd.read_csv(StringIO(data))
@@ -32,7 +31,12 @@ def CleanCSV(data):
 
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
+CORS(
+    app,
+    supports_credentials=True,
+    resources={r"/*": {"origins": ["https://quantz-dxgw.onrender.com"]}}
+)
+
 
 @app.route("/upload/<type>", methods=["POST"])
 def upload(type):
