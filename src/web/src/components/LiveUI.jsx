@@ -70,4 +70,43 @@ const LiveSingleText = ({ type = "text", placeholder = "", onClick, className = 
     );
 };
 
-export { LiveButton, LiveSingleText };
+const LiveSelect = ({ className = "", id = "", value, options, onChange, onClick }) => {
+    const [hover, setHover] = useState(false);
+
+    const baseStyles = {
+        background: hover ? "var(--panel)" : "var(--surface)",
+        borderRadius: "var(--radius)",
+        boxShadow: hover
+            ? "0 4px 12px rgba(10, 132, 255, 0.15)"
+            : "var(--shadow)",
+        border: `2px solid ${hover ? "var(--primary)" : "var(--border)"}`,
+        transition: "all 0.2s ease",
+        cursor: "text",
+        color: "var(--fg)",
+        outline: "none",
+        fontFamily: "var(--font)",
+        fontSize: "16px",
+        fontWeight: "500",
+        padding: "10px 15px 10px 15px"
+    };
+
+    return (
+        <select
+            onChange={onChange}
+            onClick={onClick}
+            className={className}
+            id={id}
+            value={value}
+            style={baseStyles}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}>
+            {options && options.map((i) => {
+                return (
+                    <option value={i}>{i}</option>
+                );
+            })}
+        </select>
+    );
+};
+
+export { LiveButton, LiveSingleText, LiveSelect };
