@@ -20,7 +20,7 @@ function SaveStrategyJSON(_nodes, _edges) {
     };
 }
 
-const BASE_URL = "https://pyquantz.onrender.com";
+const BASE_URL = "https://quantz-ccrv.onrender.com";
 
 const SendToBackend = async (data, type, content_type) => {
     try {
