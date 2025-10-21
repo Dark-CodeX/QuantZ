@@ -7,7 +7,19 @@ import { FlowCanvas, getId } from './FlowCanvas';
 import { SaveStrategyJSON } from './Helper';
 import CandlestickChart from './CandlestickChart';
 
-const INDICATORS = ["SMA", "EMA", "WMA", "VWMA", "MACD", "RSI", "BollingerBands", "ATR"];
+const INDICATORS = {
+    "SMA": { "Period": "Number" },
+    "EMA": { "Period": "Number" },
+    "WMA": { "Period": "Number", "Weights": "Select" },
+    "VWMA": { "Period": "Number" },
+    "MACD": { "Fast": "Number", "Slow": "Number" },
+    "RSI": { "Period": "Number" },
+    "BollingerBands": { "Period": "Number", "Multiplier": "Number" },
+    "ATR": { "Period": "Number" }
+};
+const INDICATORS_SELECT_OPTIONS = {
+    "WMA": ["Linear", "Harmonic", "Triangular", "Normalized Linear", "Quadratic", "Cubic", "Root"]
+}
 const OPERATORS = ["Equals To (=)", "Not Equals To (≠)", "Less Than (<)", "More Than (>)", "Less Than or Equals To (≤)", "More Than or Equals To (≥)"];
 const ACTIONS = ["Buy", "Sell"]
 const CONTROL_NODES = ["Start", "End"];
@@ -30,14 +42,14 @@ export default function Main({ CSVData }) {
                 <details className="panel-section">
                     <summary>Indicators</summary>
                     <div className="items">
-                        {INDICATORS.map((ind) => (
+                        {Object.entries(INDICATORS).map(([key, val], i) => (
                             <div
-                                key={ind}
+                                key={key}
                                 className="draggable-item"
                                 draggable
-                                onDragStart={(e) => handleDragStart(e, ind)}
+                                onDragStart={(e) => handleDragStart(e, key)}
                             >
-                                {ind}
+                                {key}
                             </div>
                         ))}
                     </div>
@@ -98,9 +110,9 @@ export default function Main({ CSVData }) {
                 <div className="operation-panel">
                     <LiveButton><span style={{ color: "green" }}>&#9654;</span> Run</LiveButton>
                     <LiveButton className="selected-button" id="graph" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("graph"); document.getElementById("left-panel").classList.remove("collapsed"); }}>Graph</LiveButton>
-                    <LiveButton id="chart" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("chart"); document.getElementById("left-panel").classList.add("collapsed");  }}>Chart</LiveButton>
-                    <LiveButton id="backtest" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("backtest"); document.getElementById("left-panel").classList.add("collapsed");  }}>Backtest</LiveButton>
-                    <LiveButton id="ml_model" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("ml_model"); document.getElementById("left-panel").classList.add("collapsed");  }}>Create ML Model</LiveButton>
+                    <LiveButton id="chart" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("chart"); document.getElementById("left-panel").classList.add("collapsed"); }}>Chart</LiveButton>
+                    <LiveButton id="backtest" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("backtest"); document.getElementById("left-panel").classList.add("collapsed"); }}>Backtest</LiveButton>
+                    <LiveButton id="ml_model" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("ml_model"); document.getElementById("left-panel").classList.add("collapsed"); }}>Create ML Model</LiveButton>
                     <LiveButton onClick={() => {
                         const data = JSON.stringify(SaveStrategyJSON(nodes, edges), null, 1);
                         const element = document.createElement("a");
@@ -119,7 +131,7 @@ export default function Main({ CSVData }) {
                     selectedPage === "graph" &&
                     <ReactFlowProvider>
                         <FlowCanvas nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges}
-                            indicatorsList={INDICATORS} operatorsList={OPERATORS} actionsList={ACTIONS} controlList={CONTROL_NODES} setIndicatorLines={setIndicatorLines} />
+                            indicatorsList={INDICATORS} indicatorsSelectOptions={INDICATORS_SELECT_OPTIONS} operatorsList={OPERATORS} actionsList={ACTIONS} controlList={CONTROL_NODES} setIndicatorLines={setIndicatorLines} />
                     </ReactFlowProvider>
                 }
                 {

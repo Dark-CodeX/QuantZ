@@ -10,13 +10,13 @@ import ReactFlow, {
 import '../css/root.css';
 import '../css/FlowCanvas.css';
 import 'reactflow/dist/style.css';
-import { LiveButton, LiveSingleText } from "./LiveUI";
+import { LiveButton, LiveSelect, LiveSingleText } from "./LiveUI";
 import { SendToBackend } from "./Helper"
 import ErrorBox from './ErrorBox';
 
 const getId = () => crypto.randomUUID();
 
-function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operatorsList, actionsList, controlList, setIndicatorLines }) {
+function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicatorsSelectOptions, operatorsList, actionsList, controlList, setIndicatorLines }) {
     const [selectedNode, setSelectedNode] = useState(null);
     const [nodeInputValue, setNodeInputValue] = useState("");
     const [errorMessage, setErrorMessage] = useState([]);
@@ -47,20 +47,25 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
                 y: event.clientY,
             });
 
-            const kind = indicatorsList.includes(type) ? "indicator" : (operatorsList.includes(type) ? "operator" : (actionsList.includes(type) ? "action" : "control"));
+            const kind = Object.keys(indicatorsList).includes(type) ? "indicator" : operatorsList.includes(type) ? "operator" : actionsList.includes(type) ? "action" : "control";
+
+            // Dynamic field initialization for indicators
+            let data = { label: type, kind };
+            if (kind === "indicator") {
+                Object.entries(indicatorsList[type]).map(([k, v]) => (data[k] = ""))
+            }
 
             const newNode = {
                 id: getId(),
-                type: 'default',
+                type: "default",
                 position,
-                data: { label: type, kind },
-                className: kind === 'indicator' ? 'node-indicator' : (kind === "operator" ? "node-operator" : (kind === "action" ? "node-action" : (type === "Start" ? "node-control_start" : "node-control_end"))),
+                data,
+                className: kind === "indicator" ? "node-indicator" : kind === "operator" ? "node-operator" : kind === "action" ? "node-action" : type === "Start" ? "node-control_start" : "node-control_end",
             };
 
             setNodes((nds) => nds.concat(newNode));
             setSelectedNode(newNode);
-            if (kind === "indicator") setNodeInputValue(newNode.data.period || "");
-            if (kind === "operator") setNodeInputValue(newNode.data.value || "");
+            setNodeInputValue("");
         },
         [rfInstance, indicatorsList]
     );
@@ -86,9 +91,15 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
         );
         setSelectedNode((prevNode) => ({
             ...prevNode,
-            data: { ...prevNode.data, [key]: v }
+            data: { ...prevNode.data, [key]: v },
         }));
     };
+
+    function stringifyParams(obj) {
+        return Object.entries(obj)
+            .map(([key, value]) => `${key}: ${value}`)
+            .join(', ');
+    }
 
     return (
         <div className="flow-area" onDrop={onDrop} onDragOver={onDragOver}>
@@ -134,44 +145,75 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, operator
                         </div>
                     )}
 
-                    {selectedNode.data.kind === 'indicator' && (
+                    {selectedNode.data.kind === "indicator" && (
                         <div>
-                            <label>Period:</label>
-                            <LiveSingleText
-                                value={nodeInputValue}
-                                placeholder="Period"
-                                onChange={(e) => setNodeInputValue(e.target.value)}
-                            />
-                            <div style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                gap: "8px"
-                            }}>
-                                <LiveButton onClick={() => {
-                                    handleSettingChange("period", nodeInputValue);
-                                    if (nodeInputValue !== "")
+                            {Object.entries(indicatorsList[selectedNode.data.label]).map(([param, val]) => (
+                                <div key={param} style={{ marginBottom: "8px" }}>
+                                    <label style={{ display: "block", marginBottom: "4px" }}>{param}:</label>
+                                    {val === "Number" && <LiveSingleText
+                                        value={selectedNode.data[param] || ""}
+                                        placeholder={param}
+                                        onChange={(e) =>
+                                            handleSettingChange(param, e.target.value)
+                                        }
+                                    />}
+                                    {val === "Select" && <LiveSelect
+                                        value={selectedNode.data[param] || ""}
+                                        options={indicatorsSelectOptions[selectedNode.data.label]}
+                                        onChange={(e) =>
+                                            handleSettingChange(param, e.target.value)
+                                        }
+                                    />}
+                                </div>
+                            ))}
+
+                            <div style={{ display: "flex", flexDirection: "row", gap: "8px" }}>
+                                <LiveButton
+                                    onClick={() => {
+                                        const params = {};
+                                        Object.entries(indicatorsList[selectedNode.data.label]).map(([param, v]) => {
+                                            if (v === "Number")
+                                                params[param.toLowerCase()] = parseFloat(
+                                                    selectedNode.data[param]
+                                                );
+                                            else
+                                                params[param.toLowerCase()] = selectedNode.data[param]
+                                        });
                                         SendToBackend(
-                                            JSON.stringify({ period: parseInt(nodeInputValue, 10) }, null, 1),
+                                            JSON.stringify(params, null, 1),
                                             `/indicators/${selectedNode.data.label}`,
-                                            "application/json"
-                                        )
+                                            "application/json")
                                             .then((res) => {
                                                 if (res.status === 400) {
                                                     setErrorMessage((prev) => [...prev, res.body]);
                                                 } else {
-                                                    const parsedArray = JSON.parse(res.body.replace(/\bnan\b/g, 'null'));
+                                                    const parsedArray = JSON.parse(
+                                                        res.body.replace(/\bnan\b/g, "null")
+                                                    );
                                                     setIndicatorLines((prevLines) => ({
                                                         ...prevLines,
-                                                        [selectedNode.id]: { l: selectedNode.data.label + nodeInputValue, a: parsedArray },
+                                                        [selectedNode.id]: {
+                                                            l:
+                                                                selectedNode.data.label +
+                                                                " [" + stringifyParams(params) + "]",
+                                                            a: parsedArray,
+                                                        },
                                                     }));
                                                 }
                                             })
-                                            .catch((err) => setErrorMessage((prev) => [...prev, err.toString()]));
-                                }} >Submit</LiveButton>
-                                <LiveButton onClick={() => setSelectedNode(null)} >Close</LiveButton>
+                                            .catch((err) =>
+                                                setErrorMessage((prev) => [...prev, err.toString()])
+                                            );
+                                    }}
+                                >
+                                    Submit
+                                </LiveButton>
+
+                                <LiveButton onClick={() => setSelectedNode(null)}>Close</LiveButton>
                             </div>
                         </div>
                     )}
+
 
                     {(selectedNode.data.kind === "action" || selectedNode.data.kind === "control") && (
                         <LiveButton onClick={() => setSelectedNode(null)} >Close</LiveButton>
