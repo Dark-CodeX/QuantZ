@@ -24,7 +24,7 @@ html,
     padding: 16px;
     border-right: 1px solid var(--border);
     box-shadow: var(--shadow);
-    overflow: hidden;
+    overflow: auto;
     transition: width 0.2s ease-in-out, padding 0.2s ease-in-out;
 }
 
