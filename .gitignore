@@ -1,3 +1,5 @@
+# C/C++
+
 # Prerequisites
 *.d
 
@@ -94,3 +96,35 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# PYTHON
+
+# Byte-code files
+*.pyc
+__pycache__/
+*.so
+*.orig
+
+# Virtual environment
+venv/
+env/
+.venv/
+.env/
+
+# IDE-specific files (e.g., VS Code, PyCharm)
+.vscode/
+.idea/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Test/coverage files
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Logs and temporary files
+*.log
+tmp/
