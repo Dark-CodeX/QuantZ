@@ -7,6 +7,7 @@ import quantzlib as qz
 
 global_df = None  # better to use None
 
+
 def CleanCSV(data):
     global global_df
     df = pd.read_csv(StringIO(data))
@@ -23,7 +24,7 @@ def CleanCSV(data):
         df['date'], format='%m/%d/%Y').dt.strftime('%Y-%m-%d')
     for col in ['close', 'open', 'high', 'low']:
         df[col] = pd.to_numeric(df[col].replace(
-            {'\$': ''}, regex=True), errors='coerce')
+            {r'\$': ''}, regex=True), errors='coerce')
     df['volume'] = pd.to_numeric(df['volume'], errors='coerce')
     df = df.iloc[::-1].reset_index(drop=True)
     global_df = df
