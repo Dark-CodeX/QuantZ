@@ -9,17 +9,24 @@ import CandlestickChart from './CandlestickChart';
 import Backtest from './Backtest';
 
 const INDICATORS = {
-    "SMA": { "Period": "Number" },
-    "EMA": { "Period": "Number" },
-    "WMA": { "Period": "Number", "Weights": "Select" },
-    "VWMA": { "Period": "Number" },
-    "MACD": { "Fast": "Number", "Slow": "Number" },
-    "RSI": { "Period": "Number" },
-    "BollingerBands": { "Period": "Number", "Multiplier": "Number" },
-    "ATR": { "Period": "Number" }
+    "SMA": { "Price": "Select", "Period": "Number" },
+    "EMA": { "Price": "Select", "Period": "Number" },
+    "WMA": { "Price": "Select", "Period": "Number", "Weights": "Select" },
+    "VWMA": { "Price": "Select", "Period": "Number" },
+    "MACD": { "Price": "Select", "Fast": "Number", "Slow": "Number" },
+    "RSI": { "Price": "Select", "Period": "Number" },
+    "BollingerBands": { "Price": "Select", "Period": "Number", "Multiplier": "Number" },
+    "ATR": { "Price": "Select", "Period": "Number" }
 };
 const INDICATORS_SELECT_OPTIONS = {
-    "WMA": ["Linear", "Harmonic", "Triangular", "Normalized Linear", "Quadratic", "Cubic", "Root"]
+    "SMA": { "Price": ["Open", "Low", "High", "Close"] },
+    "EMA": { "Price": ["Open", "Low", "High", "Close"] },
+    "WMA": { "Price": ["Open", "Low", "High", "Close"], "Weights": ["Linear", "Harmonic", "Triangular", "Normalized Linear", "Quadratic", "Cubic", "Root"] },
+    "VWMA": { "Price": ["Open", "Low", "High", "Close"] },
+    "MACD": { "Price": ["Open", "Low", "High", "Close"] },
+    "RSI": { "Price": ["Open", "Low", "High", "Close"] },
+    "BollingerBands": { "Price": ["Open", "Low", "High", "Close"] },
+    "ATR": { "Price": ["Open", "Low", "High", "Close"] },
 }
 const OPERATORS = ["Equals To (=)", "Not Equals To (≠)", "Less Than (<)", "More Than (>)", "Less Than or Equals To (≤)", "More Than or Equals To (≥)"];
 const ACTIONS = ["Buy", "Sell"]
@@ -138,7 +145,7 @@ export default function Main({ CSVData }) {
                     selectedPage === "chart" && <CandlestickChart data={CSVData} indicatorLines={indicatorLines} />
                 }
                 {
-                    selectedPage === "backtest" && <Backtest></Backtest>
+                    selectedPage === "backtest" && <Backtest nodes={nodes} edges={edges}></Backtest>
                 }
             </main >
         </div >

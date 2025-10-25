@@ -1,6 +1,5 @@
 from io import StringIO
 from flask import Flask, request, jsonify
-import json
 import pandas as pd
 from flask_cors import CORS
 import quantzlib as qz
@@ -52,36 +51,44 @@ def upload(type):
 @app.route("/indicators/<indicator>", methods=["POST"])
 def indicators(indicator):
     global global_df
-    if global_df is None or "close" not in global_df:
-        return "No data loaded. Upload CSV first.", 400
+    if global_df is None:
+        return "Error: no historical data loaded, upload CSV first", 400
 
     data = request.get_json(force=True)
     if indicator == "SMA":
         period = data.get("period")
-        return str(qz.SMA(global_df["close"], period))
+        price = data.get("price").lower()
+        return str(qz.SMA(global_df[price], period))
     elif indicator == "EMA":
         period = data.get("period")
-        return str(qz.EMA(global_df["close"], period))
+        price = data.get("price").lower()
+        return str(qz.EMA(global_df[price], period))
     elif indicator == "RSI":
         period = data.get("period")
-        return str(qz.RSI(global_df["close"], period))
+        price = data.get("price").lower()
+        return str(qz.RSI(global_df[price], period))
     elif indicator == "ATR":
         period = data.get("period")
-        return str(qz.ATR(global_df["high"], global_df["low"], global_df["close"], period))
+        price = data.get("price").lower()
+        return str(qz.ATR(global_df["high"], global_df["low"], global_df[price], period))
     elif indicator == "MACD":
         fast = data.get("fast")
         slow = data.get("slow")
-        return str(qz.MACD(global_df["close"], fast, slow))
+        price = data.get("price").lower()
+        return str(qz.MACD(global_df[price], fast, slow))
     elif indicator == "VWMA":
         period = data.get("period")
-        return str(qz.VWMA(global_df["close"], global_df["volume"], period))
+        price = data.get("price").lower()
+        return str(qz.VWMA(global_df[price], global_df["volume"], period))
     elif indicator == "BollingerBands":
         period = data.get("period")
         multiplier = data.get("multiplier")
-        return str(qz.BollingerBands(global_df["close"], period, multiplier))
+        price = data.get("price").lower()
+        return str(qz.BollingerBands(global_df[price], period, multiplier))
     elif indicator == "WMA":
         period = data.get("period")
         w = data.get("weights").lower()
+        price = data.get("price").lower()
         if w == "linear":
             weights = [i for i in range(1, period + 1)]
         elif w == "normalized linear":
@@ -102,10 +109,15 @@ def indicators(indicator):
             weights = [i**0.5 for i in range(1, period + 1)]
         else:
             return f"Error: unknown WMA weight type '{w}'", 400
-
-        return str(qz.WMA(global_df["close"], weights, period))
+        return str(qz.WMA(global_df[price], weights, period))
     return f"Error: unknown indicator '{indicator}'", 400
 
+
+@app.route("/backtest", methods=["POST"])
+def backtest():
+    data = request.get_json(force=True)
+    
+    return ""
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)

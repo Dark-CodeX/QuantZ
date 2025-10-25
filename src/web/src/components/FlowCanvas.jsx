@@ -159,7 +159,7 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicato
                                     />}
                                     {val === "Select" && <LiveSelect
                                         value={selectedNode.data[param] || ""}
-                                        options={indicatorsSelectOptions[selectedNode.data.label]}
+                                        options={indicatorsSelectOptions[selectedNode.data.label][param]}
                                         onChange={(e) =>
                                             handleSettingChange(param, e.target.value)
                                         }
