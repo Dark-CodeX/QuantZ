@@ -1,0 +1,79 @@
+.backtest-container {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.backtest-input {
+    flex: 0 0 280px;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.backtest-input label {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.date-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.date-field {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 6px;
+}
+
+.spread-button {
+    flex: 1 !important;
+}
+
+.backtest-output {
+    flex: 1;
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow: auto;
+}
+
+.backtest-output h3 {
+    margin: 0;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.backtest-chart-placeholder,
+.backtest-stats-placeholder {
+    flex: 1;
+    background: var(--panel);
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    border: 1px dashed var(--border);
+}
