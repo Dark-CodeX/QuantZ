@@ -1,96 +1,96 @@
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body,
 html,
 #root {
-  margin: 0;
-  height: 100%;
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--fg);
+    margin: 0;
+    height: 100%;
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--fg);
 }
 
 .app {
-  display: flex;
-  flex-direction: column;
-  min-height: calc(100% - 79px);
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100% - 79px);
 }
 
 .shell {
-  display: flex;
-  flex: 1;
-  gap: 16px;
+    display: flex;
+    flex: 1;
+    gap: 16px;
 }
 
 .side {
-  width: 20rem;
-  background: var(--panel);
-  color: var(--fg);
-  padding: 16px;
-  border-right: 1px solid var(--border);
-  box-shadow: var(--shadow);
+    width: 20rem;
+    background: var(--panel);
+    color: var(--fg);
+    padding: 16px;
+    border-right: 1px solid var(--border);
+    box-shadow: var(--shadow);
 }
 
 .quick-access-panel,
 .settings {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  flex-direction: column;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-direction: column;
 }
 
 .settings {
-  position: fixed;
-  bottom: 16px;
-  width: calc(20rem - 32px);
+    position: fixed;
+    bottom: 16px;
+    width: calc(20rem - 32px);
 }
 
 .quick-access-panel button,
 .settings button {
-  padding: 10px 12px !important;
-  font-size: 17px !important;
-  font-weight: 500 !important;
+    padding: 10px 12px !important;
+    font-size: 17px !important;
+    font-weight: 500 !important;
 }
 
 .grid {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 16px;
-  padding: 16px;
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    padding: 16px;
 }
 
 .new,
 .card {
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: var(--shadow);
-  text-align: center;
-  border: 2px dashed var(--border);
-  transition: all 0.2s ease;
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    border: 2px dashed var(--border);
+    transition: all 0.2s ease;
 }
 
 .new {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .new:hover {
-  border-color: var(--primary);
-  background: var(--panel);
-  box-shadow: 0 4px 12px rgba(10, 132, 255, 0.15);
+    border-color: var(--primary);
+    background: var(--panel);
+    box-shadow: 0 4px 12px rgba(10, 132, 255, 0.15);
 }
 
 .new>small,
 .new>div {
-  color: var(--fg);
+    color: var(--fg);
 }
 
 .plus {
-  font-size: 36px;
-  color: var(--primary);
-  font-weight: 900;
+    font-size: 36px;
+    color: var(--primary);
+    font-weight: 900;
 }
