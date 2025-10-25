@@ -100,6 +100,7 @@ const LiveSelect = ({ className = "", id = "", value, options, onChange, onClick
             style={baseStyles}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}>
+            <option value="" disabled selected>Select an option</option>
             {options && options.map((i) => {
                 return (
                     <option key={i} value={i}>{i}</option>
