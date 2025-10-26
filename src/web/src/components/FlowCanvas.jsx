@@ -12,23 +12,13 @@ import '../css/FlowCanvas.css';
 import 'reactflow/dist/style.css';
 import { LiveButton, LiveSelect, LiveSingleText } from "./LiveUI";
 import { SendToBackend } from "./Helper"
-import ErrorBox from './ErrorBox';
 
 const getId = () => crypto.randomUUID();
 
-function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicatorsSelectOptions, operatorsList, actionsList, controlList, setIndicatorLines }) {
+function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicatorsSelectOptions, operatorsList, actionsList, controlList, setIndicatorLines , setErrorMessage}) {
     const [selectedNode, setSelectedNode] = useState(null);
     const [nodeInputValue, setNodeInputValue] = useState("");
-    const [errorMessage, setErrorMessage] = useState([]);
     const rfInstance = useReactFlow();
-
-    useEffect(() => {
-        if (!errorMessage.length) return;
-        const timer = setTimeout(() => {
-            setErrorMessage((prev) => prev.slice(1)); // remove first message immutably
-        }, 1500);
-        return () => clearTimeout(timer);
-    }, [errorMessage]);
 
     // Node / Edge changes
     const onNodesChange = useCallback((changes) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
@@ -117,9 +107,6 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicato
                 <Controls />
                 <Background color="var(--fg)" size={0.5} />
             </ReactFlow>
-            {errorMessage && (
-                <ErrorBox msg={errorMessage} setErrorMessage={setErrorMessage} />
-            )}
 
             {/* Settings Panel */}
             {selectedNode && (
