@@ -9,14 +9,14 @@ import CandlestickChart from './CandlestickChart';
 import Backtest from './Backtest';
 
 const INDICATORS = {
-    "SMA": { "Price": "Select", "Period": "Number" },
-    "EMA": { "Price": "Select", "Period": "Number" },
-    "WMA": { "Price": "Select", "Period": "Number", "Weights": "Select" },
-    "VWMA": { "Price": "Select", "Period": "Number" },
-    "MACD": { "Price": "Select", "Fast": "Number", "Slow": "Number" },
-    "RSI": { "Price": "Select", "Period": "Number" },
-    "BollingerBands": { "Price": "Select", "Period": "Number", "Multiplier": "Number" },
-    "ATR": { "Price": "Select", "Period": "Number" }
+    "SMA": { "Price": "Select", "Period": "number" },
+    "EMA": { "Price": "Select", "Period": "number" },
+    "WMA": { "Price": "Select", "Period": "number", "Weights": "Select" },
+    "VWMA": { "Price": "Select", "Period": "number" },
+    "MACD": { "Price": "Select", "Fast": "number", "Slow": "number" },
+    "RSI": { "Price": "Select", "Period": "number" },
+    "BollingerBands": { "Price": "Select", "Period": "number", "Multiplier": "float" },
+    "ATR": { "Price": "Select", "Period": "number" }
 };
 const INDICATORS_SELECT_OPTIONS = {
     "SMA": { "Price": ["Open", "Low", "High", "Close"] },
