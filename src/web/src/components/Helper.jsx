@@ -43,13 +43,14 @@ const SendToBackend = async (data, endPoint, content_type) => {
  * Validates if `s` is of type `_type`.
  * @param {*} s String that has to be validated against rules.
  * @param {*} _type Specifies the rules.
+ * @param {*} label Specifies the label of the input.
  */
-function ValidateInput(s, _type) {
+function ValidateInput(s, _type, label) {
     s = s.trim();
     if (s === null || s === "")
     {
         return {
-            r: false, m: "Error: input is either null or empty."
+            r: false, m: `Error: Input for ${label} is either null or empty.`
         }
     }
     if (_type === "number") {
@@ -59,7 +60,7 @@ function ValidateInput(s, _type) {
             };
         } else {
             return {
-                r: false, m: `Error: ${s} is not a valid integer.`
+                r: false, m: `Error: In ${label}, ${s} is not a valid integer.`
             };
         }
     }
@@ -71,7 +72,7 @@ function ValidateInput(s, _type) {
         }
         else {
             return {
-                r: false, m: `Error: ${s} is not a valid number.`
+                r: false, m: `Error: In ${label}, ${s} is not a valid number.`
             };
         }
     }

@@ -127,7 +127,7 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicato
                                 gap: "8px"
                             }}>
                                 <LiveButton onClick={() => {
-                                    const validation = ValidateInput(nodeInputValue, "float");
+                                    const validation = ValidateInput(nodeInputValue, "float", "Value");
                                     if (validation.r === false) {
                                         setErrorMessage((prev) => [...prev, validation.m]);
                                         return;
@@ -167,7 +167,7 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicato
                                         const params = {};
                                         Object.entries(indicatorsList[selectedNode.data.label]).map(([param, v]) => {
                                             if (v === "number" || v === "float") {
-                                                const validation = ValidateInput(selectedNode.data[param], v);
+                                                const validation = ValidateInput(selectedNode.data[param], v, param);
                                                 if (validation.r === false) {
                                                     setErrorMessage((prev) => [...prev, validation.m]);
                                                     return;
