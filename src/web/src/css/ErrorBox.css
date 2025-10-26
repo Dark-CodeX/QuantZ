@@ -5,10 +5,11 @@
     justify-items: normal;
     overflow-y: auto;
     max-height: 400px;
-    top: 20px;
-    left: 20px;
-    position: absolute;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     z-index: 100;
+    align-items: flex-end;
 }
 
 .error-box-container {
@@ -19,6 +20,8 @@
     flex-direction: row;
     gap: 20px;
     justify-items: stretch;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .error-box-container>button {
@@ -44,9 +47,10 @@
     transform: scale(1.1) !important;
 }
 
-.error-box>p {
+.error-box-container p {
     font-size: 14px;
     color: var(--fg);
     font-weight: 500;
     font-family: var(--font);
+    margin: 0;
 }
