@@ -32,7 +32,7 @@ const OPERATORS = ["Equals To (=)", "Not Equals To (≠)", "Less Than (<)", "Mor
 const ACTIONS = ["Buy", "Sell"]
 const CONTROL_NODES = ["Start", "End"];
 
-export default function Main({ CSVData }) {
+export default function Main({ CSVData, setErrorMessage }) {
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [selectedPage, setSelectedPage] = useState("strategy"); // strategy, chart, backtest, ml_model
@@ -138,7 +138,8 @@ export default function Main({ CSVData }) {
                     selectedPage === "strategy" &&
                     <ReactFlowProvider>
                         <FlowCanvas nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges}
-                            indicatorsList={INDICATORS} indicatorsSelectOptions={INDICATORS_SELECT_OPTIONS} operatorsList={OPERATORS} actionsList={ACTIONS} controlList={CONTROL_NODES} setIndicatorLines={setIndicatorLines} />
+                            indicatorsList={INDICATORS} indicatorsSelectOptions={INDICATORS_SELECT_OPTIONS} operatorsList={OPERATORS} actionsList={ACTIONS}
+                            controlList={CONTROL_NODES} setIndicatorLines={setIndicatorLines} setErrorMessage={setErrorMessage} />
                     </ReactFlowProvider>
                 }
                 {
