@@ -3,7 +3,7 @@ function SaveStrategyJSON(_nodes, _edges, backtest = null) {
         return {
             id: node.id,
             data: node.data,
-            position: node.position,
+            position: node.position
         };
     });
 
