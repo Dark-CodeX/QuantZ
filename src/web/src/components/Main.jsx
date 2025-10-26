@@ -146,7 +146,7 @@ export default function Main({ CSVData, setErrorMessage }) {
                     selectedPage === "chart" && <CandlestickChart data={CSVData} indicatorLines={indicatorLines} />
                 }
                 {
-                    selectedPage === "backtest" && <Backtest nodes={nodes} edges={edges}></Backtest>
+                    selectedPage === "backtest" && <Backtest nodes={nodes} edges={edges} setErrorMessage={setErrorMessage} />
                 }
             </main >
         </div >
