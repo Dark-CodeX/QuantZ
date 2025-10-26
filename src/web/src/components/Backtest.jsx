@@ -3,12 +3,12 @@ import "../css/root.css";
 import "../css/Backtest.css";
 import {
     LiveButton,
-    LiveSelect,
     LiveSingleText,
     LiveDateInput,
 } from "./LiveUI";
+import { SaveStrategyJSON, SendToBackend, ValidateInput } from './Helper';
 
-const Backtest = () => {
+const Backtest = ({ nodes, edges, setErrorMessage }) => {
     // State variables
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
@@ -17,7 +17,43 @@ const Backtest = () => {
     const [commission, setCommission] = useState("");
 
     function handle_run() {
+        {
+            let validation = ValidateInput(capital, "float", "Capital");
+            if (validation.r === false) {
+                setErrorMessage((prev) => [...prev, validation.m]);
+                return;
+            }
+            validation = ValidateInput(positionSize, "float", "Position Size")
+            if (validation.r === false) {
+                setErrorMessage((prev) => [...prev, validation.m]);
+                return;
+            }
+            validation = ValidateInput(commission, "float", "Commission")
+            if (validation.r === false) {
+                setErrorMessage((prev) => [...prev, validation.m]);
+                return;
+            }
+            const d1 = new Date(startDate);
+            const d2 = new Date(endDate);
+            if (isNaN(d1.getTime()) || isNaN(d2.getTime())) {
+                setErrorMessage((prev) => [...prev, "Error: Invalid date format."]);
+                return;
+            }
+            if (d1.getTime() > d2.getTime()) {
+                setErrorMessage((prev) => [...prev, "Error: Start date cannot be after end date."]);
+                return;
+            }
+            if (d1.getTime() === d2.getTime()) {
+                setErrorMessage((prev) => [...prev, "Error: Start date and end date cannot be the same."]);
+                return;
+            }
+        }
 
+        let data = JSON.stringify(SaveStrategyJSON(nodes, edges, { startDate: startDate, endDate: endDate, capital: capital, positionSize: positionSize, commission: commission }), null, 1);
+        SendToBackend(
+            JSON.stringify(data, null, 1), "/backtest", "application/json")
+            .then((res) => { })
+            .catch((err) => { });
     }
 
     return (
@@ -71,7 +107,7 @@ const Backtest = () => {
                 </div>
 
                 <div style={{ display: "flex", flexDirection: "row", gap: "8px" }}>
-                    <LiveButton className="spread-button">
+                    <LiveButton className="spread-button" onClick={handle_run}>
                         <span style={{ color: "green", fontWeight: "bold" }}>&#9654;</span>
                         <b> Run</b>
                     </LiveButton>
