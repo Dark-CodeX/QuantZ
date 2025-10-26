@@ -1,4 +1,4 @@
-function SaveStrategyJSON(_nodes, _edges) {
+function SaveStrategyJSON(_nodes, _edges, backtest = null) {
     const processedNodes = _nodes.map((node) => {
         return {
             id: node.id,
@@ -16,7 +16,8 @@ function SaveStrategyJSON(_nodes, _edges) {
 
     return {
         nodes: processedNodes,
-        edges: processedEdges
+        edges: processedEdges,
+        backtest: backtest
     };
 }
 
