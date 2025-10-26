@@ -11,11 +11,11 @@ import '../css/root.css';
 import '../css/FlowCanvas.css';
 import 'reactflow/dist/style.css';
 import { LiveButton, LiveSelect, LiveSingleText } from "./LiveUI";
-import { SendToBackend } from "./Helper"
+import { SendToBackend, ValidateInput } from "./Helper"
 
 const getId = () => crypto.randomUUID();
 
-function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicatorsSelectOptions, operatorsList, actionsList, controlList, setIndicatorLines , setErrorMessage}) {
+function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicatorsSelectOptions, operatorsList, actionsList, controlList, setIndicatorLines, setErrorMessage }) {
     const [selectedNode, setSelectedNode] = useState(null);
     const [nodeInputValue, setNodeInputValue] = useState("");
     const rfInstance = useReactFlow();
@@ -126,7 +126,14 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicato
                                 flexDirection: "row",
                                 gap: "8px"
                             }}>
-                                <LiveButton onClick={() => handleSettingChange("value", nodeInputValue)} >Submit</LiveButton>
+                                <LiveButton onClick={() => {
+                                    const validation = ValidateInput(nodeInputValue, "float");
+                                    if (validation.r === false) {
+                                        setErrorMessage((prev) => [...prev, validation.m]);
+                                        return;
+                                    }
+                                    handleSettingChange("value", nodeInputValue);
+                                }} >Submit</LiveButton>
                                 <LiveButton onClick={() => setSelectedNode(null)} >Close</LiveButton>
                             </div>
                         </div>
@@ -137,7 +144,7 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicato
                             {Object.entries(indicatorsList[selectedNode.data.label]).map(([param, val]) => (
                                 <div key={param} style={{ marginBottom: "8px" }}>
                                     <label style={{ display: "block", marginBottom: "4px" }}>{param}:</label>
-                                    {val === "Number" && <LiveSingleText
+                                    {(val === "number" || val === "float") && <LiveSingleText
                                         value={selectedNode.data[param] || ""}
                                         placeholder={param}
                                         onChange={(e) =>
@@ -159,12 +166,19 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicato
                                     onClick={() => {
                                         const params = {};
                                         Object.entries(indicatorsList[selectedNode.data.label]).map(([param, v]) => {
-                                            if (v === "Number")
+                                            if (v === "number" || v === "float") {
+                                                const validation = ValidateInput(selectedNode.data[param], v);
+                                                if (validation.r === false) {
+                                                    setErrorMessage((prev) => [...prev, validation.m]);
+                                                    return;
+                                                }
                                                 params[param.toLowerCase()] = parseFloat(
                                                     selectedNode.data[param]
                                                 );
-                                            else
+                                            }
+                                            else {
                                                 params[param.toLowerCase()] = selectedNode.data[param]
+                                            }
                                         });
                                         SendToBackend(
                                             JSON.stringify(params, null, 1),
