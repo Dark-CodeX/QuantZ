@@ -5,19 +5,19 @@ import Navbar from "./components/Navbar"
 import ErrorBox from "./components/ErrorBox";
 
 function App() {
-    const [file, setFile] = useState(null);
     const [CSVData, setCSVData] = useState([]);
     const [errorMessage, setErrorMessage] = useState([]);
+    const [showMain, setShowMain] = useState(false);
     return (
         <>
             <Navbar />
-            {!file ? (
-                <Home file={file} setFile={setFile} setCSVData={setCSVData} />
+            {errorMessage.length > 0 && (
+                <ErrorBox errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
+            )}
+            {!showMain ? (
+                <Home setShowMain={setShowMain} setCSVData={setCSVData} setErrorMessage={setErrorMessage} />
             ) : (
                 <Main CSVData={CSVData} setErrorMessage={setErrorMessage} />
-            )}
-            {errorMessage && (
-                <ErrorBox errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
             )}
         </>
     );

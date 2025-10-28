@@ -22,6 +22,7 @@ html,
     display: flex;
     flex: 1;
     gap: 16px;
+    position: relative;
 }
 
 .side {
@@ -93,4 +94,71 @@ html,
     font-size: 36px;
     color: var(--primary);
     font-weight: 900;
+}
+
+.new-workbook {
+    width: 500px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background-color: var(--panel);
+    border-radius: 15px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.file-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    gap: 12px;
+    width: 100%;
+    box-shadow: var(--shadow);
+}
+
+.file-input-wrapper:hover {
+    border-color: var(--primary);
+}
+
+.file-input-wrapper span {
+    flex: 1;
+    color: var(--fg);
+    opacity: 0.8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-input-wrapper button {
+    padding: 8px 14px !important;
+}
+
+.workbook-actions-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.workbook-actions-buttons>button {
+    padding: 8px 12px !important;
+    flex: 1 !important;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
 }

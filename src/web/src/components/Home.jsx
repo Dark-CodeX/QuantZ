@@ -1,37 +1,84 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import "../css/root.css";
 import "../css/Home.css";
-import { LiveButton } from "./LiveUI";
+import { LiveButton, LiveSingleText } from "./LiveUI";
 import { SendToBackend } from "./Helper"
 
-export default function Home({ file, setFile, setCSVData }) {
+function NewWorkbook({ setShowNewWorkbood, setShowMain, setCSVData, setErrorMessage }) {
     const fileRef = useRef(null);
+    const [file, setFile] = useState(null);
+    const [fileName, setFileName] = useState("Choose a CSV file");
+    const [workbookName, setWorkbookName] = useState("");
 
-    function pickFile() {
-        fileRef.current?.click();
-    }
-
-    function handleFile(e) {
+    function handleChange(e) {
         const f = e.target.files?.[0];
         if (!f) return;
-
+        setFileName(f.name);
         setFile(f);
-
-        const formData = new FormData();
-        formData.append("file", f);
-
-        SendToBackend(formData, "/upload/csv", null).then((response) => {
-            if (response.status === 200) setCSVData(JSON.parse(response.body));
-        }).catch((err) => {
-            console.error("Upload failed:", err);
-        });
-
         e.target.value = null;
     }
 
+    function onSubmit() {
+        if (!file) {
+            setErrorMessage((prev) => [...prev, "Error: Upload a CSV file first."])
+            return;
+        }
+        const formData = new FormData();
+        formData.append("file", file);
+
+        SendToBackend(formData, "/upload/csv", null).then((response) => {
+            if (response.status === 200) {
+                setCSVData(JSON.parse(response.body));
+                setShowMain(true);
+            }
+            else {
+                setErrorMessage((prev) => [...prev, response.body]);
+            }
+        }).catch((err) => {
+            setErrorMessage((prev) => [...prev, err.toString()])
+        });
+
+    }
+
+    return (
+        <div className="new-workbook">
+            <h3 style={{ textAlign: "center" }}>New Workbook</h3>
+            <div className="input-group">
+                <label style={{ fontWeight: "bold" }}>Workbook Name:</label>
+                <LiveSingleText placeholder="workbook1.qz" value={workbookName} onChange={(e) => { setWorkbookName(e.target.value) }} />
+            </div>
+
+            <div className="input-group">
+                <label style={{ fontWeight: "bold" }}>Upload CSV:</label>
+                <div className="file-input-wrapper" onClick={() => fileRef.current.click()}>
+                    <span>{fileName}</span>
+                    <LiveButton>Browse</LiveButton>
+                </div>
+            </div>
+
+            <div className="workbook-actions-buttons">
+                <LiveButton onClick={onSubmit}>Submit</LiveButton>
+                <LiveButton onClick={() => { setFileName("Choose a CSV file"); setShowNewWorkbood(false); }}>Cancel</LiveButton>
+            </div>
+
+            <input
+                type="file"
+                ref={fileRef}
+                onChange={handleChange}
+                accept=".csv,text/csv"
+                style={{ display: "none" }}
+            />
+        </div >
+    );
+}
+
+export default function Home({ setShowMain, setCSVData, setErrorMessage }) {
+    const [workbooks, setWorkbooks] = useState({});
+    const [showNewWorkbood, setShowNewWorkbood] = useState(false);
 
     return (
         <div className="app">
+            {showNewWorkbood && <NewWorkbook setShowNewWorkbood={setShowNewWorkbood} setShowMain={setShowMain} setCSVData={setCSVData} setErrorMessage={setErrorMessage} />}
             <div className="shell">
                 <aside className="side">
                     <div className="quick-access-panel">
@@ -45,34 +92,20 @@ export default function Home({ file, setFile, setCSVData }) {
                         <LiveButton>Account</LiveButton>
                     </div>
                 </aside>
-
                 <main>
                     <div className="grid">
-                        <button className="new" onClick={pickFile}>
+                        <button className="new" onClick={() => setShowNewWorkbood(true)}>
                             <span className="plus">+</span>
                             <div style={{ fontSize: "18px", fontWeight: "bold" }}>New workbook</div>
                             <small style={{ fontSize: "12px" }}>Upload a CSV</small>
                         </button>
 
-                        {file && file.map((f, i) => (
-                            <article key={i} className="card">
-                                <h3>{f.name}</h3>
-                                <a href={f.url} target="_blank" rel="noreferrer">
-                                    Open File
-                                </a>
-                            </article>
-                        ))}
+                        {Object.entries(workbooks).map(([key, value], i) => {
+
+                        })}
                     </div>
                 </main>
-            </div>
-
-            <input
-                type="file"
-                accept=".csv,text/csv"
-                ref={fileRef}
-                style={{ display: "none" }}
-                onChange={handleFile}
-            />
-        </div>
+            </div >
+        </div >
     );
 }
