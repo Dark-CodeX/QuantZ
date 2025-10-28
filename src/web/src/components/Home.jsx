@@ -58,7 +58,7 @@ function NewWorkbook({ setShowNewWorkbood, setShowMain, setCSVData, setErrorMess
 
             <div className="workbook-actions-buttons">
                 <LiveButton onClick={onSubmit}>Submit</LiveButton>
-                <LiveButton onClick={() => { setFileName("Choose a CSV file"); setShowNewWorkbood(false); }}>Cancel</LiveButton>
+                <LiveButton onClick={() => { setFileName("Choose a CSV file"); setFile(null); setShowNewWorkbood(false); }}>Cancel</LiveButton>
             </div>
 
             <input
@@ -73,7 +73,7 @@ function NewWorkbook({ setShowNewWorkbood, setShowMain, setCSVData, setErrorMess
 }
 
 export default function Home({ setShowMain, setCSVData, setErrorMessage }) {
-    const [workbooks, setWorkbooks] = useState({});
+    const [workbooks, setWorkbooks] = useState([{ name: "rsi28-sma20.qz", thumbnail: null }, { name: "ema14-atr20.qz", thumbnail: null }, { name: "bb24-wma24.qz", thumbnail: null }]);
     const [showNewWorkbood, setShowNewWorkbood] = useState(false);
 
     return (
@@ -100,9 +100,26 @@ export default function Home({ setShowMain, setCSVData, setErrorMessage }) {
                             <small style={{ fontSize: "12px" }}>Upload a CSV</small>
                         </button>
 
-                        {Object.entries(workbooks).map(([key, value], i) => {
+                        {workbooks.map((v, i) => (
+                            <div key={i} className="card" onClick={() => {
+                                console.log("Opening workbook:", v.name);
+                            }}>
+                                <div style={{ width: "100%", height: "100px", overflow: "hidden", borderRadius: "8px", marginBottom: "8px" }}>
+                                    {v.thumbnail
+                                        ? <img src={v.thumbnail} alt={v.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                        : <div style={{
+                                            width: "100%", height: "100%", background: "var(--border)",
+                                            display: "flex", alignItems: "center", justifyContent: "center", opacity: 0.5
+                                        }}>
+                                            (No Preview)
+                                        </div>}
+                                </div>
 
-                        })}
+                                <div style={{ fontSize: "14px", fontWeight: "600", wordBreak: "break-all" }}>
+                                    {v.name}
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </main>
             </div >
