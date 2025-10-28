@@ -73,6 +73,7 @@ PYBIND11_MODULE(quantzlib, m)
     m.def("RSI", &core::indicators::RSI, "Relative Strength Index");
     m.def("BollingerBands", &core::indicators::BollingerBands, "Bollinger Bands");
     m.def("ATR", &core::indicators::ATR, "Average True Range");
+    m.def("Momentum", &core::indicators::Momentum, "Momentum");
 
     m.def("SIMD_SUM", &py_vector_sum, "SIMD Summation");
     m.def("SIMD_MEAN", &py_vector_mean, "SIMD Mean");
