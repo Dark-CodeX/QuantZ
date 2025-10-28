@@ -18,6 +18,12 @@ html,
     min-height: calc(100% - 79px);
 }
 
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 .shell {
     display: flex;
     flex: 1;
@@ -59,13 +65,29 @@ html,
 .grid {
     flex: 1;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 16px;
     padding: 16px;
+    align-content: start;
 }
 
-.new,
 .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(10, 132, 255, 0.18);
+    transform: translateY(-2px);
+}
+
+.new {
     background: var(--surface);
     border-radius: var(--radius);
     padding: 16px;
