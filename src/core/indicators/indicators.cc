@@ -188,4 +188,14 @@ namespace core::indicators
 
         return SMA(true_range, n);
     }
+
+    std::vector<double> Momentum(const std::vector<double> &prices, const std::size_t n)
+    {
+        if (n == 0 || prices.size() <= n)
+            return {};
+        std::vector<double> momentum_values(prices.size(), std::numeric_limits<double>::quiet_NaN());
+        for (std::size_t i = n; i < prices.size(); i++)
+            momentum_values[i] = prices[i] - prices[i - n];
+        return momentum_values;
+    }
 }

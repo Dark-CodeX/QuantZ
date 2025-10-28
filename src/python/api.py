@@ -85,6 +85,10 @@ def indicators(indicator):
         multiplier = data.get("multiplier")
         price = data.get("price").lower()
         return str(qz.BollingerBands(global_df[price], period, multiplier))
+    elif indicator == "Momentum":
+        period = data.get("period")
+        price = data.get("price").lower()
+        return str(qz.Momentum(global_df[price], period))
     elif indicator == "WMA":
         period = data.get("period")
         w = data.get("weights").lower()

@@ -97,6 +97,15 @@ namespace core::indicators
      * @return Measures market volatility
      */
     std::vector<double> ATR(const std::vector<double> &highs, const std::vector<double> &lows, const std::vector<double> &closes, const std::size_t &n);
+
+    /**
+     * @brief Momentum Indicator
+     *
+     * @param pricesPrice over n periods
+     * @param n Number of periods
+     * @return Absolute price change
+     */
+    std::vector<double> Momentum(const std::vector<double> &prices, const std::size_t n);
 }
 
 #endif

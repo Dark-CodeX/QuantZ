@@ -16,7 +16,8 @@ const INDICATORS = {
     "MACD": { "Price": "Select", "Fast": "number", "Slow": "number" },
     "RSI": { "Price": "Select", "Period": "number" },
     "BollingerBands": { "Price": "Select", "Period": "number", "Multiplier": "float" },
-    "ATR": { "Price": "Select", "Period": "number" }
+    "ATR": { "Price": "Select", "Period": "number" },
+    "Momentum": { "Price": "Select", "Period": "number" }
 };
 const INDICATORS_SELECT_OPTIONS = {
     "SMA": { "Price": ["Open", "Low", "High", "Close"] },
@@ -27,6 +28,7 @@ const INDICATORS_SELECT_OPTIONS = {
     "RSI": { "Price": ["Open", "Low", "High", "Close"] },
     "BollingerBands": { "Price": ["Open", "Low", "High", "Close"] },
     "ATR": { "Price": ["Open", "Low", "High", "Close"] },
+    "Momentum": { "Price": ["Open", "Low", "High", "Close"] }
 }
 const OPERATORS = ["Equals To (=)", "Not Equals To (≠)", "Less Than (<)", "More Than (>)", "Less Than or Equals To (≤)", "More Than or Equals To (≥)"];
 const ACTIONS = ["Buy", "Sell"]
