@@ -11,8 +11,8 @@ depends('./.clang-tidy')
 depends('./.clangd')
 depends('./.gitignore')
 depends('./LICENSE')
-depends('./src/bindings.py')
-depends('./src/bindings.cc')
+depends('./src/setup.py')
+depends('./src/setup.cc')
 depends('./src/core/simd_math/simd_math.c')
 depends('./src/core/simd_math/simd_math.h')
 depends('./src/core/simd_math/unit_test.c')
@@ -43,7 +43,7 @@ depends('./src/web/src/css/root.css')
 depends('./src/web/src/css/Main.css')
 
 [compile_bind_cc_py]:
-    py = ['python', './src/bindings.py', 'build_ext', '--inplace']
+    py = ['python', './src/setup.py', 'build_ext', '--inplace']
 
 [cctest]:
     cc = ['gcc', '-mfma', '-msse2', '-masm=intel', '-march=native', '-mtune=native', '-funroll-all-loops', '-O3', '-s', '-lm', './src/core/simd_math/unit_test.c', './src/core/simd_math/simd_math.c', '-o', 'unit_test']
