@@ -111,7 +111,7 @@ namespace core::indicators
         return ema;
     }
 
-    std::vector<double> WMA(const std::vector<double> &prices, const char *&weights, const std::size_t &n)
+    std::vector<double> WMA(const std::vector<double> &prices, const char *weights, const std::size_t &n)
     {
         if (n == 0 || prices.size() < n)
             return {};

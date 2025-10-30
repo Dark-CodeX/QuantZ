@@ -56,7 +56,7 @@ namespace core::indicators
      * @param n Number of periods
      * @return Applies custom weights to price data
      */
-    std::vector<double> WMA(const std::vector<double> &prices, const char *&weights, const std::size_t &n);
+    std::vector<double> WMA(const std::vector<double> &prices, const char *weights, const std::size_t &n);
 
     /**
      * @brief VWMA(Volume-Weighted Moving Average) Indicator

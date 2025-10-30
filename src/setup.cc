@@ -61,13 +61,19 @@ double py_vector_dot_product(
         buf_a.shape[0]);
 }
 
+std::vector<double> WMA(const std::vector<double> &prices, py::array_t<char, py::array::c_style | py::array::forcecast> w, const std::size_t &n)
+{
+    auto buf = w.request();
+    return core::indicators::WMA(prices, static_cast<const char *>(buf.ptr), n);
+}
+
 PYBIND11_MODULE(quantzlib, m)
 {
     m.doc() = "Quantlib bindings (SIMD + indicators)";
 
     m.def("SMA", &core::indicators::SMA, "Simple Moving Average");
     m.def("EMA", &core::indicators::EMA, "Exponential Moving Average");
-    m.def("WMA", &core::indicators::WMA, "Weighted Moving Average");
+    m.def("WMA", &WMA, "Weighted Moving Average");
     m.def("VWMA", &core::indicators::VWMA, "Volume-Weighted Moving Average");
     m.def("MACD", &core::indicators::MACD, "Moving Average Convergence/Divergence");
     m.def("RSI", &core::indicators::RSI, "Relative Strength Index");
