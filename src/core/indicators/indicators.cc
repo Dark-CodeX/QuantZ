@@ -8,6 +8,64 @@
 
 namespace core::indicators
 {
+    std::vector<double> WEIGHTS(const char *&__Type, const std::size_t &n)
+    {
+        if (n == 0 || !__Type)
+            return {};
+        std::vector<double> res(n, std::numeric_limits<double>::quiet_NaN());
+        if (std::strcmp(__Type, "linear") == 0)
+        {
+            for (std::size_t i = 1; i < n + 1; i++)
+                res[i - 1] = i;
+        }
+        else if (std::strcmp(__Type, "normalized linear") == 0)
+        {
+            for (std::size_t i = 1; i < n + 1; i++)
+                res[i - 1] = (double)i / (double)n;
+        }
+        else if (std::strcmp(__Type, "harmonic") == 0)
+        {
+            for (std::size_t i = 1; i < n + 1; i++)
+                res[i - 1] = 1.0 / (double)i;
+        }
+        else if (std::strcmp(__Type, "triangular") == 0)
+        {
+            std::size_t mid = (n + 1) / 2;
+            if (n % 2 == 0)
+            {
+                for (std::size_t i = 1; i <= mid; ++i)
+                    res[i - 1] = (double)i;
+
+                for (std::size_t i = mid; i >= 1; --i)
+                    res[n - (mid - i) - 1] = (double)i;
+            }
+            else
+            {
+                for (std::size_t i = 1; i <= mid; ++i)
+                    res[i - 1] = (double)i;
+
+                for (std::size_t i = mid - 1; i >= 1; --i)
+                    res[n - (mid - i) - 1] = (double)i;
+            }
+        }
+        else if (std::strcmp(__Type, "quadratic") == 0)
+        {
+            for (std::size_t i = 1; i < n + 1; i++)
+                res[i - 1] = i * i;
+        }
+        else if (std::strcmp(__Type, "cubic") == 0)
+        {
+            for (std::size_t i = 1; i < n + 1; i++)
+                res[i - 1] = i * i * i;
+        }
+        else if (std::strcmp(__Type, "root") == 0)
+        {
+            for (std::size_t i = 1; i < n + 1; i++)
+                res[i - 1] = std::sqrt(i);
+        }
+        return res;
+    }
+
     std::vector<double> SMA(const std::vector<double> &prices, const std::size_t &n)
     {
         if (n == 0 || prices.size() < n)
@@ -53,19 +111,20 @@ namespace core::indicators
         return ema;
     }
 
-    std::vector<double> WMA(const std::vector<double> &prices, const std::vector<double> &weights, const std::size_t &n)
+    std::vector<double> WMA(const std::vector<double> &prices, const char *&weights, const std::size_t &n)
     {
-        if (n == 0 || prices.size() < n || weights.size() < n)
+        if (n == 0 || prices.size() < n)
             return {};
 
         std::vector<double> wma(prices.size(), std::numeric_limits<double>::quiet_NaN());
-        double w_sum = vector_sum(weights.data(), n);
+        std::vector<double> w = WEIGHTS(weights, n);
+        double w_sum = vector_sum(w.data(), n);
 
         for (std::size_t i = n - 1; i < prices.size(); i++)
         {
             double prod_sum = 0;
             for (std::size_t j = 0; j < n; j++)
-                prod_sum += weights[j] * prices[i - j];
+                prod_sum += w[j] * prices[i - j];
             wma[i] = prod_sum / w_sum;
         }
         return wma;

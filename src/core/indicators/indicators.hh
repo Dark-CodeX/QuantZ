@@ -11,6 +11,7 @@
 #include <numeric>
 #include <cmath>
 #include <span>
+#include <cstring>
 
 #include "../simd_math/simd_math.h"
 
@@ -20,6 +21,15 @@
 
 namespace core::indicators
 {
+    /**
+     * @brief Returns weights array of type `__Type`
+     *
+     * @param __Type Type of weights {"Linear", "Harmonic", "Triangular", "Normalized Linear", "Quadratic", "Cubic", "Root"}
+     * @param n Number of periods
+     * @return Weights of type `__Type`
+     */
+    std::vector<double> WEIGHTS(const char *&__Type, const std::size_t &n);
+
     /**
      * @brief SMA(Simple Moving Average) Indicator
      *
@@ -46,7 +56,7 @@ namespace core::indicators
      * @param n Number of periods
      * @return Applies custom weights to price data
      */
-    std::vector<double> WMA(const std::vector<double> &prices, const std::vector<double> &weights, const std::size_t &n);
+    std::vector<double> WMA(const std::vector<double> &prices, const char *&weights, const std::size_t &n);
 
     /**
      * @brief VWMA(Volume-Weighted Moving Average) Indicator
