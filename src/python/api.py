@@ -93,35 +93,16 @@ def indicators(indicator):
         period = data.get("period")
         w = data.get("weights").lower()
         price = data.get("price").lower()
-        if w == "linear":
-            weights = [i for i in range(1, period + 1)]
-        elif w == "normalized linear":
-            weights = [i/period for i in range(1, period + 1)]
-        elif w == "harmonic":
-            weights = [1/i for i in range(1, period + 1)]
-        elif w == "triangular":
-            mid = (period + 1) // 2
-            if period % 2 == 0:
-                weights = list(range(1, mid + 1)) + list(range(mid, 0, -1))
-            else:
-                weights = list(range(1, mid + 1)) + list(range(mid - 1, 0, -1))
-        elif w == "quadratic":
-            weights = [i**2 for i in range(1, period + 1)]
-        elif w == "cubic":
-            weights = [i**3 for i in range(1, period + 1)]
-        elif w == "root":
-            weights = [i**0.5 for i in range(1, period + 1)]
-        else:
-            return f"Error: unknown WMA weight type '{w}'", 400
-        return str(qz.WMA(global_df[price], weights, period))
+        return str(qz.WMA(global_df[price], w, period))
     return f"Error: unknown indicator '{indicator}'", 400
 
 
 @app.route("/backtest", methods=["POST"])
 def backtest():
     data = request.get_json(force=True)
-    
+
     return ""
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
