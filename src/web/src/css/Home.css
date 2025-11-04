@@ -76,7 +76,7 @@ main {
     border-radius: var(--radius);
     padding: 16px;
     box-shadow: var(--shadow);
-    border: 1px solid var(--border);
+    border: 2px solid var(--border);
     cursor: pointer;
     transition: 0.2s;
 }
