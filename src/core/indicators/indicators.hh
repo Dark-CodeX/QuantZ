@@ -28,7 +28,7 @@ namespace core::indicators
      * @param n Number of periods
      * @return Weights of type `__Type`
      */
-    std::vector<double> WEIGHTS(const char *&__Type, const std::size_t &n);
+    std::vector<double> WEIGHTS(const char *__Type, const std::size_t &n);
 
     /**
      * @brief SMA(Simple Moving Average) Indicator

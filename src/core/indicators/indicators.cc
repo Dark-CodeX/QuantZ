@@ -8,7 +8,7 @@
 
 namespace core::indicators
 {
-    std::vector<double> WEIGHTS(const char *&__Type, const std::size_t &n)
+    std::vector<double> WEIGHTS(const char *__Type, const std::size_t &n)
     {
         if (n == 0 || !__Type)
             return {};
