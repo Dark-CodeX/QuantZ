@@ -65,6 +65,7 @@ PYBIND11_MODULE(quantzlib, m)
 {
     m.doc() = "Quantlib bindings (SIMD + indicators)";
 
+    m.def("WEIGHTS", &core::indicators::WEIGHTS, "Weights Array");
     m.def("SMA", &core::indicators::SMA, "Simple Moving Average");
     m.def("EMA", &core::indicators::EMA, "Exponential Moving Average");
     m.def("WMA", &core::indicators::WMA, "Weighted Moving Average");
