@@ -186,7 +186,7 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicato
                                             "application/json", setErrorMessage)
                                             .then((res) => {
                                                 if (res.status === 400) {
-                                                    setErrorMessage((prev) => [...prev, res.body]);
+                                                    setErrorMessage((prev) => [...prev, res.body === "" || res.body === null ? `Error: Empty response with code ${res.status}` : res.body]);
                                                 } else {
                                                     const parsedArray = JSON.parse(
                                                         res.body.replace(/\bnan\b/g, "null")

@@ -32,7 +32,7 @@ function NewWorkbook({ setShowNewWorkbood, setShowMain, setCSVData, setErrorMess
                 setShowMain(true);
             }
             else {
-                setErrorMessage((prev) => [...prev, response.body]);
+                setErrorMessage((prev) => [...prev, response.body === "" || response.body === null ? `Error: Empty response with code ${response.status}` : response.body]);
             }
         }).catch((err) => {
             setErrorMessage((prev) => [...prev, err.toString()])

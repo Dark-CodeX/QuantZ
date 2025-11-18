@@ -34,7 +34,7 @@ const SendToBackend = async (data, endPoint, content_type, setErrorMessage) => {
         const body = await response.text();
         return { status: response.status, body: body };
     } catch (error) {
-        setErrorMessage((prev) => [...prev, "Error:" + error.toString()]);
+        setErrorMessage((prev) => [...prev, error.toString()]);
         return { status: 0, body: null };
     }
 };
@@ -47,8 +47,7 @@ const SendToBackend = async (data, endPoint, content_type, setErrorMessage) => {
  */
 function ValidateInput(s, _type, label) {
     s = s.trim();
-    if (s === null || s === "")
-    {
+    if (s === null || s === "") {
         return {
             r: false, m: `Error: Input for ${label} is either null or empty.`
         }
