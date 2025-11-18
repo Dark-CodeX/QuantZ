@@ -15,7 +15,7 @@ import { SendToBackend, ValidateInput } from "./Helper"
 
 const getId = () => crypto.randomUUID();
 
-function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicatorsSelectOptions, operatorsList, actionsList, controlList, setIndicatorLines, setErrorMessage }) {
+function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicatorsSelectOptions, operatorsList, actionsList, controlList, setIndicatorLines, setErrorMessage, logicList }) {
     const [selectedNode, setSelectedNode] = useState(null);
     const [nodeInputValue, setNodeInputValue] = useState("");
     const rfInstance = useReactFlow();
@@ -37,7 +37,7 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicato
                 y: event.clientY,
             });
 
-            const kind = Object.keys(indicatorsList).includes(type) ? "indicator" : operatorsList.includes(type) ? "operator" : actionsList.includes(type) ? "action" : "control";
+            const kind = Object.keys(indicatorsList).includes(type) ? "indicator" : operatorsList.includes(type) ? "operator" : actionsList.includes(type) ? "action" : controlList.includes(type) ? "control" : "logic";
 
             // Dynamic field initialization for indicators
             let data = { label: type, kind };
@@ -50,7 +50,7 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicato
                 type: "default",
                 position,
                 data,
-                className: kind === "indicator" ? "node-indicator" : kind === "operator" ? "node-operator" : kind === "action" ? "node-action" : type === "Start" ? "node-control_start" : "node-control_end",
+                className: kind === "indicator" ? "node-indicator" : kind === "operator" ? "node-operator" : kind === "action" ? "node-action" : (type === "Start" || type === "TRUE") ? "node-control_start_true" : "node-control_end_false",
             };
 
             setNodes((nds) => nds.concat(newNode));
@@ -183,7 +183,7 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicato
                                         SendToBackend(
                                             JSON.stringify(params, null, 1),
                                             `/indicators/${selectedNode.data.label}`,
-                                            "application/json")
+                                            "application/json", setErrorMessage)
                                             .then((res) => {
                                                 if (res.status === 400) {
                                                     setErrorMessage((prev) => [...prev, res.body]);

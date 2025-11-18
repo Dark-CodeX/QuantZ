@@ -26,7 +26,7 @@ function NewWorkbook({ setShowNewWorkbood, setShowMain, setCSVData, setErrorMess
         const formData = new FormData();
         formData.append("file", file);
 
-        SendToBackend(formData, "/upload/csv", null).then((response) => {
+        SendToBackend(formData, "/upload/csv", null, setErrorMessage).then((response) => {
             if (response.status === 200) {
                 setCSVData(JSON.parse(response.body));
                 setShowMain(true);

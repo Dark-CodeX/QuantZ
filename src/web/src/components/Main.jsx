@@ -31,6 +31,7 @@ const INDICATORS_SELECT_OPTIONS = {
     "Momentum": { "Price": ["Open", "Low", "High", "Close"] }
 }
 const OPERATORS = ["Equals To (=)", "Not Equals To (≠)", "Less Than (<)", "More Than (>)", "Less Than or Equals To (≤)", "More Than or Equals To (≥)"];
+const LOGIC = ["TRUE", "FALSE"]
 const ACTIONS = ["Buy", "Sell"]
 const CONTROL_NODES = ["Start", "End"];
 
@@ -69,6 +70,22 @@ export default function Main({ CSVData, setErrorMessage }) {
                     <summary>Operators</summary>
                     <div className="items">
                         {OPERATORS.map((op) => (
+                            <div
+                                key={op}
+                                className="draggable-item"
+                                draggable
+                                onDragStart={(e) => handleDragStart(e, op)}
+                            >
+                                {op}
+                            </div>
+                        ))}
+                    </div>
+                </details>
+
+                <details className="panel-section">
+                    <summary>Logic</summary>
+                    <div className="items">
+                        {LOGIC.map((op) => (
                             <div
                                 key={op}
                                 className="draggable-item"
@@ -141,7 +158,7 @@ export default function Main({ CSVData, setErrorMessage }) {
                     <ReactFlowProvider>
                         <FlowCanvas nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges}
                             indicatorsList={INDICATORS} indicatorsSelectOptions={INDICATORS_SELECT_OPTIONS} operatorsList={OPERATORS} actionsList={ACTIONS}
-                            controlList={CONTROL_NODES} setIndicatorLines={setIndicatorLines} setErrorMessage={setErrorMessage} />
+                            controlList={CONTROL_NODES} setIndicatorLines={setIndicatorLines} setErrorMessage={setErrorMessage} logicList={LOGIC} />
                     </ReactFlowProvider>
                 }
                 {

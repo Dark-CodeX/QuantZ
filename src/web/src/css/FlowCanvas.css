@@ -43,7 +43,7 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.04);
 }
 
-.react-flow__node.node-control_start {
+.react-flow__node.node-control_start_true {
     background: linear-gradient(180deg, rgba(51, 180, 89, 0.1), var(--surface));
     border: 1px solid var(--border);
     color: rgb(51, 180, 89);
@@ -53,7 +53,7 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.04);
 }
 
-.react-flow__node.node-control_end {
+.react-flow__node.node-control_end_false {
     background: linear-gradient(180deg, rgba(180, 51, 89, 0.1), var(--surface));
     border: 1px solid var(--border);
     color: rgb(180, 51, 89);
