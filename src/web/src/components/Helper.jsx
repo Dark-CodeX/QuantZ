@@ -23,7 +23,7 @@ function SaveStrategyJSON(_nodes, _edges, backtest = null) {
 
 const BASE_URL = "https://quantz-ccrv.onrender.com";
 
-const SendToBackend = async (data, endPoint, content_type) => {
+const SendToBackend = async (data, endPoint, content_type, setErrorMessage) => {
     try {
         const response = await fetch(`${BASE_URL}${endPoint}`, {
             method: 'POST',
@@ -34,7 +34,7 @@ const SendToBackend = async (data, endPoint, content_type) => {
         const body = await response.text();
         return { status: response.status, body: body };
     } catch (error) {
-        console.error('Error:', error);
+        setErrorMessage((prev) => [...prev, "Error:" + error.toString()]);
         return { status: 0, body: null };
     }
 };
