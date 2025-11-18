@@ -50,10 +50,16 @@ const Backtest = ({ nodes, edges, setErrorMessage }) => {
         }
 
         let data = JSON.stringify(SaveStrategyJSON(nodes, edges, { startDate: startDate, endDate: endDate, capital: capital, positionSize: positionSize, commission: commission }), null, 1);
-        SendToBackend(
-            JSON.stringify(data, null, 1), "/backtest", "application/json")
-            .then((res) => { })
-            .catch((err) => { });
+        // SendToBackend(
+        //     JSON.stringify(data, null, 1), "/backtest", "application/json")
+        //     .then((res) => {
+        //         if (res.status === 400) {
+        //             setErrorMessage((prev) => [...prev, res.body]);
+        //         } else {
+        //             console.log(res.body)
+        //         }
+        //     })
+        //     .catch((err) => { setErrorMessage((prev) => [...prev, err.toString()]) });
     }
 
     return (
