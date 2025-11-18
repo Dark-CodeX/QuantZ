@@ -2,6 +2,7 @@ from io import StringIO
 from flask import Flask, request, jsonify
 import pandas as pd
 from flask_cors import CORS
+import json
 import quantzlib as qz
 
 global_df = None  # better to use None
@@ -95,13 +96,6 @@ def indicators(indicator):
         price = data.get("price").lower()
         return str(qz.WMA(global_df[price], w, period))
     return f"Error: unknown indicator '{indicator}'", 400
-
-
-@app.route("/backtest", methods=["POST"])
-def backtest():
-    data = request.get_json(force=True)
-
-    return ""
 
 
 if __name__ == '__main__':
