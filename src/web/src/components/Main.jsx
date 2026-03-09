@@ -135,9 +135,9 @@ export default function Main({ CSVData, setErrorMessage }) {
             <main className="main-area">
                 {/* Operation Panel */}
                 <div className="operation-panel">
-                    <LiveButton className="selected-button" id="strategy" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("strategy"); document.getElementById("left-panel").classList.remove("collapsed"); }}>Strategy</LiveButton>
-                    <LiveButton id="chart" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("chart"); document.getElementById("left-panel").classList.add("collapsed"); }}>Chart</LiveButton>
-                    <LiveButton id="backtest" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("backtest"); document.getElementById("left-panel").classList.add("collapsed"); }}>Backtest</LiveButton>
+                    <LiveButton className="selected-button" id="strategy" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("strategy"); document.getElementById("left-panel").classList.remove("collapsed"); document.getElementById("backtest-input").classList.add("collapsed"); }}>Strategy</LiveButton>
+                    <LiveButton id="chart" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("chart"); document.getElementById("left-panel").classList.add("collapsed"); document.getElementById("backtest-input").classList.add("collapsed"); }}>Chart</LiveButton>
+                    <LiveButton id="backtest" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("backtest"); document.getElementById("left-panel").classList.add("collapsed"); document.getElementById("backtest-input").classList.remove("collapsed") }}>Backtest</LiveButton>
                     <LiveButton onClick={() => {
                         const data = JSON.stringify(SaveStrategyJSON(nodes, edges), null, 1);
                         const element = document.createElement("a");
