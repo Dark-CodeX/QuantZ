@@ -121,3 +121,12 @@
     border-radius: 4px;
     border: 1px solid var(--border);
 }
+
+.deleteNodeButton {
+    border-color: rgb(200, 40, 20) !important;
+}
+
+.deleteNodeButton:hover {
+    background: rgba(200, 40, 20, 0.1) !important;
+    box-shadow: 0 2px 6px rgba(200, 40, 20, 0.08) !important;
+}
