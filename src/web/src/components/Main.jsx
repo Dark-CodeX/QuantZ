@@ -38,7 +38,7 @@ const CONTROL_NODES = ["Start", "End"];
 export default function Main({ CSVData, setErrorMessage }) {
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
-    const [selectedPage, setSelectedPage] = useState("strategy"); // strategy, chart, backtest, ml_model
+    const [selectedPage, setSelectedPage] = useState("strategy"); // strategy, chart, backtest
     const [indicatorLines, setIndicatorLines] = useState({});
 
     const handleDragStart = (event, nodeType) => {
@@ -138,7 +138,6 @@ export default function Main({ CSVData, setErrorMessage }) {
                     <LiveButton className="selected-button" id="strategy" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("strategy"); document.getElementById("left-panel").classList.remove("collapsed"); }}>Strategy</LiveButton>
                     <LiveButton id="chart" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("chart"); document.getElementById("left-panel").classList.add("collapsed"); }}>Chart</LiveButton>
                     <LiveButton id="backtest" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("backtest"); document.getElementById("left-panel").classList.add("collapsed"); }}>Backtest</LiveButton>
-                    <LiveButton id="ml_model" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("ml_model"); document.getElementById("left-panel").classList.add("collapsed"); }}>Create ML Model</LiveButton>
                     <LiveButton onClick={() => {
                         const data = JSON.stringify(SaveStrategyJSON(nodes, edges), null, 1);
                         const element = document.createElement("a");
