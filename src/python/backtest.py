@@ -180,8 +180,10 @@ def run_backtest(df, dag_json, initial_capital, allocation_fraction, commission)
     strategy = DAGStrategy(dag_json=dag_json, df=df)
     strategy._precalc_indicators()
 
-    cash = float(initial_capital)
     commission = float(commission)
+    allocation_fraction = float(allocation_fraction)
+
+    cash = float(initial_capital)
     # quantity of shares currently held (start with zero)
     position = 0.0
     entry_price = None
@@ -201,8 +203,6 @@ def run_backtest(df, dag_json, initial_capital, allocation_fraction, commission)
 
         # BUY: only if no open position
         if signal == "Buy" and position == 0:
-            # TypeError: can't multiply sequence by non-int of type 'float'
-            allocation_fraction = float(allocation_fraction)
             max_amt = equity * allocation_fraction
             qty = max_amt / curr_price if curr_price > 0 else 0
             cost = qty * curr_price
