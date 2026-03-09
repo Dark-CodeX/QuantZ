@@ -85,6 +85,12 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicato
         }));
     };
 
+    const deleteNode = (nodeSelected) => {
+        setNodes((nds) => nds.filter((n) => n.id !== nodeSelected.id));
+        setEdges((eds) => eds.filter((e) => e.source !== nodeSelected.id && e.target !== nodeSelected.id));
+        setSelectedNode(null);
+    }
+
     function stringifyParams(obj) {
         return Object.entries(obj)
             .map(([key, value]) => `${key}: ${value}`)
@@ -135,6 +141,7 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicato
                                     handleSettingChange("value", nodeInputValue);
                                 }} >Submit</LiveButton>
                                 <LiveButton onClick={() => setSelectedNode(null)} >Close</LiveButton>
+                                <LiveButton className="deleteNodeButton" onClick={() => deleteNode(selectedNode)}>Delete Node</LiveButton>
                             </div>
                         </div>
                     )}
@@ -211,13 +218,21 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicato
                                 </LiveButton>
 
                                 <LiveButton onClick={() => setSelectedNode(null)}>Close</LiveButton>
+                                <LiveButton className="deleteNodeButton" onClick={() => deleteNode(selectedNode)}>Delete Node</LiveButton>
                             </div>
                         </div>
                     )}
 
 
-                    {(selectedNode.data.kind === "action" || selectedNode.data.kind === "control") && (
-                        <LiveButton onClick={() => setSelectedNode(null)} >Close</LiveButton>
+                    {(selectedNode.data.kind === "action" || selectedNode.data.kind === "control" || selectedNode.data.kind === "logic") && (
+                        <div style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: "8px"
+                        }}>
+                            <LiveButton onClick={() => setSelectedNode(null)} >Close</LiveButton>
+                            <LiveButton className="deleteNodeButton" onClick={() => deleteNode(selectedNode)}>Delete Node</LiveButton>
+                        </div>
                     )}
                 </div>
             )}
