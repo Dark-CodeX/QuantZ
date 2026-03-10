@@ -3,7 +3,7 @@
     flex-direction: row;
     gap: 40px;
     width: 100%;
-    height: calc(100% - 80px);
+    height: calc(100% - 55px);
     padding: 15px;
     box-sizing: border-box;
 }
@@ -63,12 +63,6 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-}
-
-.backtest-output h3 {
-    margin: 0;
-    font-weight: 600;
-    color: var(--text);
 }
 
 .backtest-chart
