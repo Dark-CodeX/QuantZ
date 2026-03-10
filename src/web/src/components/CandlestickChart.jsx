@@ -46,10 +46,10 @@ export default function CandlestickChart({ data, indicatorLines }) {
 
             hoverText[i] =
                 `<b>${dateFormatter.format(d)}</b><br>` +
-                `Open: $${open.toFixed(2)}<br>` +
-                `High: $${high.toFixed(2)}<br>` +
-                `Low: $${low.toFixed(2)}<br>` +
-                `Close: $${close.toFixed(2)}<br>` +
+                `Open: $${open.toFixed(3)}<br>` +
+                `High: $${high.toFixed(3)}<br>` +
+                `Low: $${low.toFixed(3)}<br>` +
+                `Close: $${close.toFixed(3)}<br>` +
                 `Volume: ${volume.toLocaleString()}`;
         }
 
