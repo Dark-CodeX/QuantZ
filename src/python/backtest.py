@@ -233,7 +233,7 @@ def run_backtest(df, dag_json, initial_capital, allocation_fraction, commission)
             position = 0.0
             entry_price = None
 
-    equity_df = pd.DataFrame(equity_curve).set_index('Date')
+    equity_df = pd.DataFrame(equity_curve)
     trades_df = pd.DataFrame(trade_log)
     return equity_df, trades_df
 
