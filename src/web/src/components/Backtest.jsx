@@ -24,6 +24,7 @@ const EquityChart = ({ equity }) => {
 
     const { equityArr, hoverText } = useMemo(() => {
         const len = equity.length;
+        const date = new Array(len);
         const drawdown = new Array(len);
         const equityArr = new Array(len);
         const peak = new Array(len);
@@ -31,20 +32,21 @@ const EquityChart = ({ equity }) => {
         const hoverText = new Array(len);
 
         for (let i = 0; i < len; i++) {
+            date[i] = equity[i].Date;
             drawdown[i] = equity[i].Drawdown;
             equityArr[i] = equity[i].Equity;
             peak[i] = equity[i].Peak;
             returns[i] = equity[i].Returns;
 
             hoverText[i] =
-                `<b>Point ${i}</b><br>` +
+                `<b>Date: ${date[i]}</b><br>` +
                 `Drawdown: ${isNaN(drawdown[i]) ? "N/A" : (drawdown[i] * 100).toFixed(4) + "%"}<br>` +
                 `Equity: $${equityArr[i].toFixed(3)}<br>` +
                 `Peak: $${peak[i].toFixed(3)}<br>` +
                 `Returns: ${isNaN(returns[i]) ? "N/A" : (returns[i] * 100).toFixed(4) + "%"}`;
         }
 
-        return { drawdown, equity: equityArr, peak, returns, hoverText };
+        return { date, drawdown, equity: equityArr, peak, returns, hoverText };
     }, [equity]);
 
     const x = equity.map((point, index) => index);
