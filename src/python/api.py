@@ -1,9 +1,16 @@
+"""
+ @file api.py
+ @license This file is licensed under the GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007. You may obtain a copy of this license at https://www.gnu.org/licenses/gpl-3.0.en.html.
+ @author Tushar Chaurasia (Dark-CodeX)
+"""
+
 from io import StringIO
 from flask import Flask, request, jsonify
 import pandas as pd
 from flask_cors import CORS
-import json
 import quantzlib as qz
+import json
+from backtest import run_backtest, calculate_metrics
 
 global_df = None  # better to use None
 
@@ -47,6 +54,29 @@ def upload(type):
             content = file.read().decode("utf-8")
             return CleanCSV(content)
     return "No file received or unknown type", 400
+
+
+@app.route("/backtest", methods=["POST"])
+def backtest():
+    global global_df
+    if global_df is None:
+        return "Error: no historical data loaded, upload CSV first", 400
+
+    conf = request.get_json(force=True)
+    # so, conf is treated like string here, we need to parse it back to dict
+    if not isinstance(conf, dict):
+        conf = json.loads(conf)
+    initial_cap = conf.get("backtest").get("capital")
+    pos_size = conf.get("backtest").get("positionSize")
+    comm = conf.get("backtest").get("commission")
+
+    equity, trades = run_backtest(
+        global_df, conf, initial_capital=initial_cap, allocation_fraction=pos_size, commission=comm)
+    metrics = calculate_metrics(equity_df=equity, trades_df=trades)
+
+    equity = equity.to_dict(orient='records')
+    trades = trades.to_dict(orient='records')
+    return {"equity": equity, "trades": trades, "metrics": metrics}
 
 
 @app.route("/indicators/<indicator>", methods=["POST"])
