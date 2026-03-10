@@ -86,6 +86,14 @@ function FlowCanvas({ nodes, edges, setNodes, setEdges, indicatorsList, indicato
     };
 
     const deleteNode = (nodeSelected) => {
+        if (selectedNode.data.kind === "indicator")
+        {
+            setIndicatorLines((prevLines) => {
+                const newLines = { ...prevLines };
+                delete newLines[nodeSelected.id];
+                return newLines;
+            });
+        }
         setNodes((nds) => nds.filter((n) => n.id !== nodeSelected.id));
         setEdges((eds) => eds.filter((e) => e.source !== nodeSelected.id && e.target !== nodeSelected.id));
         setSelectedNode(null);
