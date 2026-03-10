@@ -163,7 +163,6 @@ const Backtest = ({ nodes, edges, setErrorMessage, startDate, endDate, capital, 
                 if (res.status === 400) {
                     setErrorMessage((prev) => [...prev, res.body]);
                 } else {
-                    console.log(res.body)
                     setData(JSON.parse(res.body.replace(/\bNaN\b/g, "null")));
                 }
             })
