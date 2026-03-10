@@ -81,7 +81,7 @@ const EquityChart = ({ equity }) => {
                     font: { size: 11, color: '#708090' }
                 },
                 xaxis: {
-                    type: "linear",
+                    type: 'date',
                     showgrid: false,
                     tickformat: '%b %d %y',
                     tickangle: -45,
