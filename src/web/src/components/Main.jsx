@@ -36,10 +36,19 @@ const ACTIONS = ["Buy", "Sell"]
 const CONTROL_NODES = ["Start", "End"];
 
 export default function Main({ CSVData, setErrorMessage }) {
+    // FlowCanvas variables
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [selectedPage, setSelectedPage] = useState("strategy"); // strategy, chart, backtest
     const [indicatorLines, setIndicatorLines] = useState({});
+
+    // Backtest variables
+    const [backtestStartDate, setBakctestStartDate] = useState("");
+    const [backtestEndDate, setBakctestEndDate] = useState("");
+    const [backtestCapital, setBakctestCapital] = useState("");
+    const [backtestPositionSize, setBakctestPositionSize] = useState("");
+    const [backtestCommission, setBakctestCommission] = useState("");
+    const [backtestData, setBakctestData] = useState(null);
 
     const handleDragStart = (event, nodeType) => {
         event.dataTransfer.setData('application/reactflow', nodeType);
@@ -135,11 +144,11 @@ export default function Main({ CSVData, setErrorMessage }) {
             <main className="main-area">
                 {/* Operation Panel */}
                 <div className="operation-panel">
-                    <LiveButton className="selected-button" id="strategy" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("strategy"); document.getElementById("left-panel").classList.remove("collapsed"); document.getElementById("backtest-input").classList.add("collapsed"); }}>Strategy</LiveButton>
-                    <LiveButton id="chart" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("chart"); document.getElementById("left-panel").classList.add("collapsed"); document.getElementById("backtest-input").classList.add("collapsed"); }}>Chart</LiveButton>
-                    <LiveButton id="backtest" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("backtest"); document.getElementById("left-panel").classList.add("collapsed"); document.getElementById("backtest-input").classList.remove("collapsed") }}>Backtest</LiveButton>
+                    <LiveButton className="selected-button" id="strategy" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("strategy"); document.getElementById("left-panel").classList.remove("collapsed"); }}>Strategy</LiveButton>
+                    <LiveButton id="chart" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("chart"); document.getElementById("left-panel").classList.add("collapsed"); }}>Chart</LiveButton>
+                    <LiveButton id="backtest" onClick={(e) => { document.getElementById(selectedPage).classList.remove("selected-button"); e.target.classList.add("selected-button"); setSelectedPage("backtest"); document.getElementById("left-panel").classList.add("collapsed"); }}>Backtest</LiveButton>
                     <LiveButton onClick={() => {
-                        const data = JSON.stringify(SaveStrategyJSON(nodes, edges), null, 1);
+                        const data = JSON.stringify(SaveStrategyJSON(nodes, edges, { startDate: backtestStartDate, endDate: backtestEndDate, capital: backtestCapital, positionSize: backtestPositionSize, commission: backtestCommission }), null, 1);
                         const element = document.createElement("a");
                         element.href = "data:application/json;charset=utf-8," + encodeURIComponent(data);
                         element.download = `strategy_${getId()}.json`;
@@ -164,7 +173,11 @@ export default function Main({ CSVData, setErrorMessage }) {
                     selectedPage === "chart" && <CandlestickChart data={CSVData} indicatorLines={indicatorLines} />
                 }
                 {
-                    selectedPage === "backtest" && <Backtest nodes={nodes} edges={edges} setErrorMessage={setErrorMessage} />
+                    selectedPage === "backtest" && <Backtest nodes={nodes} edges={edges} setErrorMessage={setErrorMessage}
+                        startDate={backtestStartDate} endDate={backtestEndDate} capital={backtestCapital} positionSize={backtestPositionSize} commission={backtestCommission}
+                        setStartDate={setBakctestStartDate} setEndDate={setBakctestEndDate} setCapital={setBakctestCapital} setPositionSize={setBakctestPositionSize}
+                        setCommission={setBakctestCommission} setData={setBakctestData} data={backtestData}
+                    />
                 }
             </main >
         </div >
