@@ -22,7 +22,7 @@ const EquityChart = ({ equity }) => {
         }
     }, []); // only on mount
 
-    const { equityArr, hoverText } = useMemo(() => {
+    const { equityArr, hoverText, dates_eq } = useMemo(() => {
         const len = equity.length;
         const date = new Array(len);
         const drawdown = new Array(len);
@@ -49,7 +49,7 @@ const EquityChart = ({ equity }) => {
         return { date, drawdown, equity: equityArr, peak, returns, hoverText };
     }, [equity]);
 
-    const x = equity.map((point, index) => index);
+    
     const y = equity.map((point) => point.Equity);
 
     return (
@@ -57,7 +57,7 @@ const EquityChart = ({ equity }) => {
             ref={plotRef}
             data={[
                 {
-                    x: x,
+                    x: dates_eq,
                     y: y,
                     type: "scatter",
                     mode: 'lines+markers',
