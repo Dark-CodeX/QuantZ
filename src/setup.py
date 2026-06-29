@@ -23,7 +23,7 @@ ext_modules = [
             "./core/indicators",
         ],
         language="c++",
-        extra_compile_args=["-std=c++20", "-mfma"],
+        extra_compile_args=["-std=c++20", "-mfma", "-mavx2", "-O3", "-march=native"],
     )
 ]
 
